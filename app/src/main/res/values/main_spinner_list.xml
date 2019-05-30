@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="main_spinner_list">
+        <item>CELE MAI POPULARE</item>
+        <item>CELE MAI VECHI</item>
+        <item>CELE MAI NOI</item>
+    </string-array>
+
+</resources>
