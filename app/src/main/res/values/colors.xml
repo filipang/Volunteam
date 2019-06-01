@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--
     <color name="colorPrimary">#FF6E15</color>
     <color name="colorSecondary">#f54762</color>
     <color name="colorTertiary">#c3498d</color>
@@ -8,6 +9,16 @@
     <color name="colorPrimaryLight">#FFE8D2</color>
     <color name="colorPrimaryLightDark">#DDBFB7</color>
     <color name="colorPrimaryLightDarker">#A38B87</color>
+    <color name="colorPrimaryLightDarkerTransparent">#79947E78</color>-->
+    <color name="colorPrimary">#FF6E15</color>
+    <color name="colorSecondary">#f54762</color>
+    <color name="colorTertiary">#c3498d</color>
+    <color name="colorQuaternary">#7e5598</color>
+    <color name="colorPrimaryDark">#793F35</color>
+    <color name="colorPrimaryLight">#FFFFFF</color>
+    <color name="colorPrimaryLightTint">#EBEBEB</color>
+    <color name="colorPrimaryLightDark">#DADADA</color>
+    <color name="colorPrimaryLightDarker">#A0A0A0</color>
     <color name="colorPrimaryLightDarkerTransparent">#79947E78</color>
     <color name="colorAccent">#D81B60</color>
 </resources>

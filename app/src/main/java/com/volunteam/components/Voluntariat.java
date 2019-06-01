@@ -1,23 +1,15 @@
-package com.volunteam;
+package com.volunteam.components;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 
 
 public class Voluntariat {
 
     //Self-explanatory test list
-    static private Voluntariat[] testList = {new Voluntariat(3, "Jucarii pentru copii",
+    static private Voluntariat[] testList = {new Voluntariat(3, "Un nume de activitate pentru ca e 5 jumate si nu mai am idei",
             "https://images.pexels.com/photos/207962/pexels-photo-207962.jpeg?cs=srgb&dl=artistic-blossom-bright-207962.jpg&fm=jpg",
             "Cursurile de formare “Management de Proiect”, susținute de formatori acreditați, au venit în întâmplinarea liceenilor.",
             true)};
@@ -29,6 +21,7 @@ public class Voluntariat {
     private String imageURL;
     private String description;
     private Boolean amISigned;
+    private Drawable drawable;
 
     public Voluntariat(Integer id, String name, String imageURL, String description, Boolean amISigned) {
         this.id = id;
@@ -89,6 +82,10 @@ public class Voluntariat {
         return amISigned;
     }
 
+    public Drawable getDrawable() {
+        return drawable;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -107,5 +104,9 @@ public class Voluntariat {
 
     public void setAmISigned(Boolean amISigned) {
         this.amISigned = amISigned;
+    }
+
+    public void setDrawable(Drawable drawable) {
+        this.drawable = drawable;
     }
 }
