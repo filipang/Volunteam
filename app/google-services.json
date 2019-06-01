@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "582462154266",
+    "firebase_url": "https://volunteam-ac11d.firebaseio.com",
+    "project_id": "volunteam-ac11d",
+    "storage_bucket": "volunteam-ac11d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:582462154266:android:2b763a8739a0c7fc",
+        "android_client_info": {
+          "package_name": "com.volunteam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "582462154266-0u9nilpgad71hvaiqmlni947rrpr5s4p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.volunteam",
+            "certificate_hash": "8126bb13e1f4487929f308cf0cabfc799e8cf056"
+          }
+        },
+        {
+          "client_id": "582462154266-dod940oluna6nhrf95eai4tu1qqojgvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqK3cMNN_k1FaHnj3FzCmmEmbwEEyV3nE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "582462154266-dod940oluna6nhrf95eai4tu1qqojgvg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
