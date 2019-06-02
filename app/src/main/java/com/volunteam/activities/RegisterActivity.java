@@ -70,7 +70,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void storeUserInDatabase() {
-        User user = new User(etFirstName.getText().toString(), etLastName.getText().toString(), etEmail.getText().toString());
+        User user = new User(etFirstName.getText().toString(), etLastName.getText().toString(), etEmail.getText().toString(), null, null);
 
         userDatabase.child("Users").child(mAuth.getCurrentUser().getUid())
                 .setValue(user)
