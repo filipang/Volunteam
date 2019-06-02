@@ -26,7 +26,7 @@ public class Voluntariat implements Serializable {
     private String description;
     private Boolean amISigned;
     private transient Drawable drawable;
-    private transient Date date;
+    private Date date;
     private String link;
 
     public Voluntariat(Integer id_vol, String id_user, String name, String imageURL, List<String> imageList, String description, Boolean amISigned, String day, String month, String year, String link) {
