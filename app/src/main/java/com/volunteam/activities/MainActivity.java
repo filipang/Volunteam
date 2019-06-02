@@ -2,6 +2,7 @@ package com.volunteam.activities;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
