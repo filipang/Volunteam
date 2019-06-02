@@ -4,29 +4,34 @@ import android.graphics.drawable.Drawable;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 
 
 public class Voluntariat {
 
     //Self-explanatory test list
-    static private Voluntariat[] testList = {new Voluntariat(3, "Un nume de activitate pentru ca e 5 jumate si nu mai am idei",
-            "https://images.pexels.com/photos/207962/pexels-photo-207962.jpeg?cs=srgb&dl=artistic-blossom-bright-207962.jpg&fm=jpg",
+    static private Voluntariat[] testList = {new Voluntariat(3, 5,"Un nume de activitate pentru ca e 5 jumate si nu mai am idei",
+            "https://images.pexels.com/photos/207962/pexels-photo-207962.jpeg?cs=srgb&dl=artistic-blossom-bright-207962.jpg&fm=jpg", null,
             "Cursurile de formare “Management de Proiect”, susținute de formatori acreditați, au venit în întâmplinarea liceenilor.",
             true)};
 
 
     //This will include all info about a "Voluntariat" entry
-    private Integer id;
+    private Integer id_vol;
+    private Integer id_user;
     private String name;
     private String imageURL;
+    private List<String> imageList;
     private String description;
     private Boolean amISigned;
     private Drawable drawable;
 
-    public Voluntariat(Integer id, String name, String imageURL, String description, Boolean amISigned) {
-        this.id = id;
+    public Voluntariat(Integer id_vol, Integer id_user, String name, String imageURL, List<String> imageList, String description, Boolean amISigned) {
+        this.id_vol = id_vol;
+        this.id_user = id_user;
         this.name = name;
         this.imageURL = imageURL;
+        this.imageList = imageList;
         this.description = description;
         this.amISigned = amISigned;
     }
@@ -62,8 +67,36 @@ public class Voluntariat {
         return testList;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getIdVol() {
+        return id_vol;
+    }
+
+    public static void setTestList(Voluntariat[] testList) {
+        Voluntariat.testList = testList;
+    }
+
+    public Integer getId_vol() {
+        return id_vol;
+    }
+
+    public void setId_vol(Integer id_vol) {
+        this.id_vol = id_vol;
+    }
+
+    public Integer getId_user() {
+        return id_user;
+    }
+
+    public void setId_user(Integer id_user) {
+        this.id_user = id_user;
+    }
+
+    public List<String> getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(List<String> imageList) {
+        this.imageList = imageList;
     }
 
     public String getName() {
@@ -84,10 +117,6 @@ public class Voluntariat {
 
     public Drawable getDrawable() {
         return drawable;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public void setName(String name) {
