@@ -2,30 +2,27 @@ package com.volunteam.activities;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.volunteam.R;
-import com.volunteam.components.MyAdapter;
+import com.volunteam.components.SmallEntryAdapter;
 import com.volunteam.components.Voluntariat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class VolMeleActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
@@ -33,12 +30,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     RecyclerView.Adapter mAdapter;
     RecyclerView.LayoutManager layoutManager;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_vol_mele);
 
         //RECYCLERVIEW SETUP
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
@@ -48,18 +43,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        mAdapter = new MyAdapter(new ArrayList<Voluntariat>(Arrays.asList(Voluntariat.getTestList())));
+        mAdapter = new SmallEntryAdapter(new ArrayList<Voluntariat>(Arrays.asList(Voluntariat.getTestList())));
         recyclerView.setAdapter(mAdapter);
-
-
-        //Spinner setup
-        Spinner spinner = findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.main_spinner_list, R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        //Image loading is done on separate slide to avoid NetworkingOnMainThreadException
-        //new Thread(new GetImageTask()).start();
 
         //NAV STUFF
         Toolbar toolbar = findViewById(R.id.toolbar_main);
@@ -70,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         NavigationView nav = findViewById(R.id.nav_view);
-        nav.setNavigationItemSelectedListener(MainActivity.this);
+        nav.setNavigationItemSelectedListener(this);
     }
 
     //Navigation stuff
@@ -103,14 +88,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent;
         switch (menuItem.getItemId()){
             case R.id.menu_exploreaza:
+                intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
                 break;
             case R.id.menu_toate_vol:
                 intent = new Intent(this, ToateVolActivity.class);
                 startActivity(intent);
                 break;
             case R.id.menu_vol_mele:
-                intent = new Intent(this, VolMeleActivity.class);
-                startActivity(intent);
+                //intent = new Intent(this, VolMeleActivity.class);
+                //startActivity(intent);
                 break;
             case R.id.menu_profil:
                 intent = new Intent(this, ProfilActivity.class);
@@ -128,57 +115,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
     //!!!!
-
-    //Task that loads Image solving threading/UI/Networking issues
-    /*
-    class GetImageTask implements Runnable {
-
-        private Handler handler;
-
-        public GetImageTask() {
-
-            //Handler is set to execute on UI/main thread
-            handler = new Handler(Looper.getMainLooper());
-        }
-
-        @Override
-        public void run() {
-            for (Voluntariat vol : Voluntariat.getTestList()) {
-                vol.setDrawable(Voluntariat.loadDrawableFromURL(vol.getImageURL()));
-            }
-
-            //After drawable is loaded, start updating the UI in the UI thread, using a handler
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-
-                    LinearLayout scrollList  = findViewById(R.id.vol_scroll_list);
-                    Voluntariat[] voluntariatList = Voluntariat.getTestList(); // = DatabaseHandler.fetchVoluntariatList(User.me);
-
-                    for (Voluntariat vol : voluntariatList) {
-
-                        //Create entry
-                        LayoutInflater inflater = getLayoutInflater();
-                        LinearLayout element = (LinearLayout) inflater.inflate(R.layout.vol_entry, scrollList, false);
-                        scrollList.addView(element);
-
-                        TextView textView = (TextView) element.getChildAt(1);
-                        textView.setText(vol.getDescription());
-
-                        ImageView img = (ImageView) element.getChildAt(2);
-                        img.setImageDrawable(vol.getDrawable());
-
-                        TextView textView1 = (TextView) element.getChildAt(3);
-                        textView1.setText(vol.getName());
-
-                        ImageView img1 = (ImageView) ((ViewGroup)element.getChildAt(0)).getChildAt(0);
-                        img1.setImageDrawable(vol.getDrawable());
-                    }
-                }
-            });
-        }
-
-    }
-    */
 }
-
