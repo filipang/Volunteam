@@ -18,7 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,15 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final RecyclerView.Adapter finalAdapter =  mAdapter;
         final MyAdapter myFinalAdapter = myAdapter;
 
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
 
-                myFinalAdapter.mDataSet = (ArrayList<Voluntariat>) Voluntariat.getDataSet().clone();
-                finalAdapter.notifyDataSetChanged();
-                return false;
-            }
-        });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -130,8 +121,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
     }
-
-
 
     //Navigation stuff
     @Override
