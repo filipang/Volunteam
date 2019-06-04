@@ -14,6 +14,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.SearchView;
 
 import com.volunteam.R;
 import com.volunteam.components.MyAdapter;
@@ -44,7 +47,7 @@ public class ToateVolActivity extends AppCompatActivity implements NavigationVie
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        mAdapter = new SmallEntryAdapter(new ArrayList<Voluntariat>(Arrays.asList(Voluntariat.getTestList())));
+        mAdapter = new SmallEntryAdapter(Voluntariat.getDataSet());
         recyclerView.setAdapter(mAdapter);
 
         //NAV STUFF
@@ -57,6 +60,10 @@ public class ToateVolActivity extends AppCompatActivity implements NavigationVie
         getSupportActionBar().setHomeButtonEnabled(true);
         NavigationView nav = findViewById(R.id.nav_view);
         nav.setNavigationItemSelectedListener(this);
+
+        //SEARCH BAR SETUP
+        SearchView searchView = findViewById(R.id.search_view);
+        searchView.setVisibility(View.VISIBLE);
     }
 
     //Navigation stuff
@@ -102,6 +109,10 @@ public class ToateVolActivity extends AppCompatActivity implements NavigationVie
                 break;
             case R.id.menu_profil:
                 intent = new Intent(this, ProfilActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_organizeaza_voluntariat:
+                intent = new Intent(this, ValidateActivity.class);
                 startActivity(intent);
                 break;
         }

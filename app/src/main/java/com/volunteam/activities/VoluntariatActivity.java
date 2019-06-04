@@ -19,6 +19,7 @@ import com.volunteam.R;
 import com.volunteam.components.ImageSlideAdapter;
 import com.volunteam.components.Voluntariat;
 
+
 public class VoluntariatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     DrawerLayout drawer;
@@ -29,8 +30,8 @@ public class VoluntariatActivity extends AppCompatActivity implements Navigation
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voluntariat);
 
-        Voluntariat vol = (Voluntariat) getIntent().getSerializableExtra("voluntariat");
-
+        Integer vol_int = Integer.parseInt(getIntent().getExtras().get("voluntariat").toString());
+        Voluntariat vol = Voluntariat.getDataSet().get(vol_int);
         //Design
 
         TextView text_titlu = findViewById(R.id.text_titlu);
@@ -38,9 +39,8 @@ public class VoluntariatActivity extends AppCompatActivity implements Navigation
         text_titlu.setText(vol.getName());
         text_descriere.setText(vol.getDescription());
 
+
         //!!
-
-
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new ImageSlideAdapter(this, vol));
 
@@ -102,7 +102,11 @@ public class VoluntariatActivity extends AppCompatActivity implements Navigation
                 intent = new Intent(this, ProfilActivity.class);
                 startActivity(intent);
                 break;
-        }
+            case R.id.menu_organizeaza_voluntariat:
+                intent = new Intent(this, ValidateActivity.class);
+                startActivity(intent);
+                break;
+    }
         return true;
     }
 

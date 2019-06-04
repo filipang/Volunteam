@@ -82,6 +82,10 @@ public class ProfilActivity extends AppCompatActivity implements NavigationView.
                 //intent = new Intent(this, ProfilActivity.class);
                 //startActivity(intent);
                 break;
+            case R.id.menu_organizeaza_voluntariat:
+                intent = new Intent(this, ValidateActivity.class);
+                startActivity(intent);
+                break;
         }
         return true;
     }

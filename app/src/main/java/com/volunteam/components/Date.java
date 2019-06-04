@@ -1,6 +1,8 @@
 package com.volunteam.components;
 
-public class Date {
+import java.io.Serializable;
+
+public class Date implements Serializable {
 
     public String day;
     public String month;

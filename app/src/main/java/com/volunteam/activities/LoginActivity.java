@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.volunteam.R;
+import com.volunteam.components.FirebaseHandler;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -28,6 +29,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public FirebaseUser mUser;
     public FirebaseDatabase mDatabase;
     public DatabaseReference userReference;
+
+
+    FirebaseHandler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +51,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
     public void logInWithEmailAndPassword(String email, String password) {
-
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -64,10 +67,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
     public void initFirebase() {
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance();
-        userReference = mDatabase.getReference().child("users");
+        if(FirebaseHandler.getFirebaseHandler() == null) {
+            mAuth = FirebaseAuth.getInstance();
+            mUser = mAuth.getCurrentUser();
+            mDatabase = FirebaseDatabase.getInstance();
+            userReference = mDatabase.getReference().child("users");
+            mHandler = new FirebaseHandler(mAuth, mUser, mDatabase, mDatabase.getReference());
+            FirebaseHandler.setFirebaseHandler(mHandler);
+        }
+        else{
+            mHandler = FirebaseHandler.getFirebaseHandler();
+            mAuth = mHandler.getAuth();
+            mUser = mHandler.getUser();
+            mDatabase = mHandler.getDatabase();
+            userReference = mHandler.getReference();
+        }
     }
 
     @Override
