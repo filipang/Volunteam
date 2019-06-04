@@ -15,6 +15,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.snapshot.PriorityIndex;
 import com.volunteam.components.User;
 import com.volunteam.R;
 
@@ -70,7 +71,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void storeUserInDatabase() {
-        User user = new User(etFirstName.getText().toString(), etLastName.getText().toString(), etEmail.getText().toString(), null, null);
+        final User user = new User(etFirstName.getText().toString(), etLastName.getText().toString(), etEmail.getText().toString(), null, null);
 
         userDatabase.child("Users").child(mAuth.getCurrentUser().getUid())
                 .setValue(user)

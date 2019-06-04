@@ -1,20 +1,25 @@
 package com.volunteam.components;
 
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class Voluntariat implements Serializable {
 
     //Self-explanatory test list
-    static private Voluntariat[] testList = {new Voluntariat(3, "5","Un nume de activitate pentru ca e 5 jumate si nu mai am idei",
-            "https://images.pexels.com/photos/207962/pexels-photo-207962.jpeg?cs=srgb&dl=artistic-blossom-bright-207962.jpg&fm=jpg", null,
-            "Cursurile de formare “Management de Proiect”, susținute de formatori acreditați, au venit în întâmplinarea liceenilor.",
-            true, "5", "6", "1999", " asdfasdfasdf ")};
+    static private ArrayList<Voluntariat> dataSet;
 
 
     //This will include all info about a "Voluntariat" entry
@@ -28,6 +33,10 @@ public class Voluntariat implements Serializable {
     private transient Drawable drawable;
     private Date date;
     private String link;
+    private User user;
+
+    public Voluntariat(){
+    }
 
     public Voluntariat(Integer id_vol, String id_user, String name, String imageURL, List<String> imageList, String description, Boolean amISigned, String day, String month, String year, String link) {
         this.id_vol = id_vol;
@@ -84,16 +93,16 @@ public class Voluntariat implements Serializable {
         this.date = date;
     }
 
-    public static Voluntariat[] getTestList() {
-        return testList;
+    public static ArrayList<Voluntariat> getDataSet() {
+        return dataSet;
     }
 
     public Integer getIdVol() {
         return id_vol;
     }
 
-    public static void setTestList(Voluntariat[] testList) {
-        Voluntariat.testList = testList;
+    public static void setDataSet(ArrayList<Voluntariat> dataSet) {
+        Voluntariat.dataSet = dataSet;
     }
 
     public Integer getId_vol() {
@@ -158,5 +167,35 @@ public class Voluntariat implements Serializable {
 
     public void setDrawable(Drawable drawable) {
         this.drawable = drawable;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void fetchUserData(){
+        FirebaseHandler firebaseHandler = FirebaseHandler.getFirebaseHandler();
+        final DatabaseReference database = firebaseHandler.getReference().child(id_user);
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User new_user = new User();
+                new_user.setFirstName(dataSnapshot.child("firstName").getValue().toString());
+                new_user.setEmail(dataSnapshot.child("email").getValue().toString());
+                new_user.setLastName(dataSnapshot.child("lastName").getValue().toString());
+                new_user.setPozaURL(dataSnapshot.child("pozaProfil").getValue().toString());
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

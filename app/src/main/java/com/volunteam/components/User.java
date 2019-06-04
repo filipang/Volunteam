@@ -1,5 +1,7 @@
 package com.volunteam.components;
 
+import android.graphics.drawable.Drawable;
+
 import java.util.List;
 
 public class User {
@@ -9,6 +11,7 @@ public class User {
     public String email;
     public List<Integer> voluntariate;
     public String pozaURL;
+    public Drawable drawable;
 
     public User() {}
 
@@ -58,5 +61,13 @@ public class User {
 
     public void setPozaURL(String pozaURL) {
         this.pozaURL = pozaURL;
+    }
+
+    public Drawable getDrawable() {
+        return drawable;
+    }
+
+    public void setDrawable(Drawable drawable) {
+        this.drawable = drawable;
     }
 }

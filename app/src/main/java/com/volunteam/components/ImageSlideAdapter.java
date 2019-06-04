@@ -1,11 +1,15 @@
 package com.volunteam.components;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.volunteam.R;
 
 public class ImageSlideAdapter extends PagerAdapter {
     private Context mContext;
@@ -19,9 +23,16 @@ public class ImageSlideAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup collection, int position) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        ImageView img = new ImageView(mContext);
-        img.setImageDrawable(Voluntariat.loadDrawableFromURL(voluntariat.getImageList().get(position)));
+        ImageView img = (ImageView) inflater.inflate(R.layout.image_slider_element, collection, false);
+        if(position == 0){
+            img.setImageDrawable(voluntariat.getDrawable());
+        }
+        else{
+            img.setImageDrawable(Voluntariat.loadDrawableFromURL(voluntariat.getImageList().get(position)));
+        }
+        Log.d("happ", "THIS HAPPENED AT " + position);
         img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        img.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         collection.addView(img);
         return img;
     }

@@ -15,14 +15,17 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ActionBarDrawerToggle toggle;
     RecyclerView recyclerView;
     RecyclerView.Adapter mAdapter;
+    MyAdapter myAdapter; //Same as mAdapter
     RecyclerView.LayoutManager layoutManager;
 
 
@@ -57,13 +61,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        mAdapter = new MyAdapter(new ArrayList<Voluntariat>(Arrays.asList(Voluntariat.getTestList())));
+        Log.d("HOW MANYY??", "THIS MANY: " + Voluntariat.getDataSet().size());
+        myAdapter = new MyAdapter(Voluntariat.getDataSet());
+        mAdapter = myAdapter;
         recyclerView.setAdapter(mAdapter);
 
 
         //Spinner setup
         Spinner spinner = findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.main_spinner_list, R.layout.simple_spinner_item);
+        final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.main_spinner_list, R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
@@ -79,27 +85,58 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         NavigationView nav = findViewById(R.id.nav_view);
-        nav.setNavigationItemSelectedListener(MainActivity.this);
+        nav.setNavigationItemSelectedListener(this);
+
+        //SEARCH BAR SETUP
+
+        SearchView searchView = findViewById(R.id.search_view);
+        searchView.setVisibility(View.VISIBLE);
+        final RecyclerView.Adapter finalAdapter =  mAdapter;
+        final MyAdapter myFinalAdapter = myAdapter;
+
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //SORT DATA SET
+                ArrayList<Voluntariat> filteredList = (ArrayList<Voluntariat>) Voluntariat.getDataSet().clone();
+                if(!query.equals("")) {
+                    for (Voluntariat vol : Voluntariat.getDataSet()) {
+                        if (!(vol.getDescription().contains(query) || vol.getName().contains(query))) {
+                            filteredList.remove(vol);
+                        }
+                    }
+                }
+                myFinalAdapter.mDataSet = filteredList;
+                finalAdapter.notifyDataSetChanged();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+
+        });
+
     }
 
     //Navigation stuff
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
-        Log.d("click", "XDD1");
         super.onPostCreate(savedInstanceState);
         toggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        Log.d("click", "XDDD2");
         super.onConfigurationChanged(newConfig);
         toggle.onConfigurationChanged(newConfig);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        Log.d("click", "AAAA" + item.getItemId());
         if (toggle.onOptionsItemSelected(item)) {
             return true;
         }
@@ -123,6 +160,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.menu_profil:
                 intent = new Intent(this, ProfilActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_organizeaza_voluntariat:
+                intent = new Intent(this, ValidateActivity.class);
                 startActivity(intent);
                 break;
         }

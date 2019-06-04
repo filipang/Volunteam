@@ -2,8 +2,14 @@ package com.volunteam.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,19 +24,22 @@ import com.google.firebase.database.ValueEventListener;
 import com.volunteam.R;
 
 
-public class ValidateActivity extends AppCompatActivity implements View.OnClickListener {
+public class ValidateActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     public FirebaseUser usr = FirebaseAuth.getInstance().getCurrentUser();
     public FirebaseDatabase mDatabase;
     public DatabaseReference volDatabase;
     public DatabaseReference lastOne;
 
+    DrawerLayout drawer;
+    ActionBarDrawerToggle toggle;
+
     public EditText name, imageURL, imageURL1, imageURL2, imageURL3, imageURL4, imageURL5, description,
             link, day, month, year;
     public Button getConfirmation;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_validate);
@@ -55,9 +64,50 @@ public class ValidateActivity extends AppCompatActivity implements View.OnClickL
 
         getConfirmation.setOnClickListener(this);
 
+        //NAV STUFF
+        Toolbar toolbar = findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbar);
+        drawer = findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        NavigationView nav = findViewById(R.id.nav_view);
+        nav.setNavigationItemSelectedListener(this);
+
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        Log.d("click", "SOMETHING SOMETHING AT LEAST!???  " + menuItem.getOrder());
+        Intent intent;
+        switch (menuItem.getItemId()){
+            case R.id.menu_exploreaza:
+                intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_toate_vol:
+                intent = new Intent(this, ToateVolActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_vol_mele:
+                intent = new Intent(this, VolMeleActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_profil:
+                intent = new Intent(this, ProfilActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_organizeaza_voluntariat:
+                intent = new Intent(this, ValidateActivity.class);
+                startActivity(intent);
+                break;
+        }
+        return true;
     }
 
     public void storeVolInDatabase() {
+
 
         volDatabase.child("LastVolID").addListenerForSingleValueEvent(new ValueEventListener() {
                                                        @Override

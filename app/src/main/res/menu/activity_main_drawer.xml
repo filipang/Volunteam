@@ -17,6 +17,10 @@
             android:id="@+id/menu_profil"
             android:icon="@drawable/ic_profile"
             android:title="Profil" />
+        <item
+            android:id="@+id/menu_organizeaza_voluntariat"
+            android:icon="@drawable/ic_plus"
+            android:title="Organizeaza voluntariat" />
     </group>
 
     <!--
