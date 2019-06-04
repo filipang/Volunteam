@@ -1,22 +1,14 @@
 package com.volunteam.components;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.List;
 
 public class User {
-
-    public static FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-    public static DatabaseReference userDatabase = mDatabase.getReference();
 
     public String firstName;
     public String lastName;
     public String email;
     public List<Integer> voluntariate;
     public String pozaURL;
-
 
     public User() {}
 
@@ -26,12 +18,6 @@ public class User {
         this.email = email;
         this.voluntariate = voluntariate;
         this.pozaURL = pozaURL;
-
-    }
-
-    private static String getCurrentId() {
-
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     public String getFirstName() {

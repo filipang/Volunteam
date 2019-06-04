@@ -2,20 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group>
         <item
-            android:id="@+id/menu_exploreaza"
-            android:icon="@drawable/ic_explore"
+            android:id="@+id/nav_item_one"
+            android:icon="@android:drawable/btn_star_big_on"
             android:title="Exploreaza" />
-        <item
-            android:id="@+id/menu_toate_vol"
-            android:icon="@drawable/ic_list"
+        <item android:id="@+id/nav_item_two"
+            android:icon="@android:drawable/btn_star_big_on"
             android:title="Toate voluntariatele" />
-        <item
-            android:id="@+id/menu_vol_mele"
-            android:icon="@drawable/ic_diploma"
-            android:title="Voluntariatele mele" />
-        <item
-            android:id="@+id/menu_profil"
-            android:icon="@drawable/ic_profile"
+        <item android:id="@+id/nav_item_three"
+            android:icon="@android:drawable/btn_star_big_on"
             android:title="Profil" />
     </group>
 
