@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,9 +16,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.snapshot.PriorityIndex;
-import com.volunteam.components.User;
 import com.volunteam.R;
+import com.volunteam.components.User;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -56,6 +56,30 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void signUpWithEmailAndPassword(String email, String password) {
+        if(TextUtils.isEmpty(email)){
+            Toast.makeText(this, "Please enter email",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(password)){
+            Toast.makeText(this, "Please enter password",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(etFirstName.getText().toString())){
+            Toast.makeText(this, "Please enter your First Name",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(etLastName.getText().toString())){
+            Toast.makeText(this, "Please enter your Second Name",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(etRepeatPassword.getText().toString())){
+            Toast.makeText(this, "Please repeat your password",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(!etPassword.getText().toString().equals(etRepeatPassword.getText().toString())){
+            Toast.makeText(this, "Passwords don't match",Toast.LENGTH_SHORT).show();
+            return;
+        }
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
