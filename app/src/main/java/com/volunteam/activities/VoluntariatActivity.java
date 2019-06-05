@@ -69,11 +69,12 @@ public class VoluntariatActivity extends AppCompatActivity implements Navigation
 
 
         //Design
-
+        final TextView textViewNume = findViewById(R.id.textProfileName);
         TextView text_titlu = findViewById(R.id.text_titlu);
         TextView text_descriere = findViewById(R.id.text_descriere);
         text_titlu.setText(vol.getName());
         text_descriere.setText(vol.getDescription());
+
 
 
         //!!
@@ -91,7 +92,17 @@ public class VoluntariatActivity extends AppCompatActivity implements Navigation
         getSupportActionBar().setHomeButtonEnabled(true);
         NavigationView nav = findViewById(R.id.nav_view);
         nav.setNavigationItemSelectedListener(this);
+        FirebaseHandler.getFirebaseHandler().getReference().child("Users").child(vol.getId_user()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                textViewNume.setText(dataSnapshot.child("lastName").getValue().toString()+" "+ dataSnapshot.child("firstName").getValue().toString());
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         //DISABLE SEARCH BAR
         SearchView searchView = findViewById(R.id.search_view);
         if(searchView!=null)searchView.setVisibility(View.GONE);

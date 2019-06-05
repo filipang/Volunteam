@@ -45,7 +45,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/textProfileName"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
@@ -67,7 +67,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/textViewNoVoluntariate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -101,7 +101,8 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="Angheluta" />
+                android:text="Angheluta"
+                android:visibility="gone" />
 
             <EditText
                 android:id="@+id/editText2"
@@ -112,7 +113,8 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="Filip" />
+                android:text="Filip"
+                android:visibility="gone" />
 
             <EditText
                 android:id="@+id/editText3"
@@ -123,25 +125,16 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textEmailAddress"
-                android:text="smart.filip48@gmail.com" />
+                android:text="smart.filip48@gmail.com"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/button3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Aplica modificarile" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="10dp"
-                android:gravity="right"
-                android:text="Cont creat pe data de 14 iunie, 2018" />
+                android:text="Aplica modificarile"
+                android:visibility="gone" />
 
             <View
                 android:id="@+id/view"

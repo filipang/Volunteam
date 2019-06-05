@@ -14,8 +14,13 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.volunteam.R;
+import com.volunteam.components.User;
+import com.volunteam.components.Voluntariat;
+
+import org.w3c.dom.Text;
 
 public class ProfilActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -55,6 +60,13 @@ public class ProfilActivity extends AppCompatActivity implements NavigationView.
         //DISABLE SEARCH BAR
         SearchView searchView = findViewById(R.id.search_view);
         if(searchView!=null)searchView.setVisibility(View.GONE);
+
+        //PROFILE DETAILS SETUP
+        TextView number = findViewById(R.id.textViewNoVoluntariate);
+        TextView name = findViewById(R.id.textProfileName);
+        number.setText(User.currentUser.voluntariate.size());
+        name.setText(User.currentUser.lastName + " " + User.currentUser.firstName);
+
     }
 
     //Navigation stuff
