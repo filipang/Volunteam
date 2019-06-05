@@ -18,7 +18,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.volunteam.R;
+import com.volunteam.components.FirebaseHandler;
 import com.volunteam.components.SmallEntryAdapter;
 import com.volunteam.components.Voluntariat;
 
@@ -47,9 +51,29 @@ public class VolMeleActivity extends AppCompatActivity implements NavigationView
         recyclerView.setLayoutManager(layoutManager);
 
 
-        ArrayList<Voluntariat> listVol = new ArrayList<Voluntariat>();
-        mAdapter = new SmallEntryAdapter();
-        recyclerView.setAdapter(mAdapter);
+        FirebaseHandler.getFirebaseHandler().getReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> listVol = new ArrayList<String>();
+                for(DataSnapshot ds : dataSnapshot.child("Users").child(FirebaseHandler.getFirebaseHandler().getAuth().getUid()).child("voluntariate").getChildren()){
+                    listVol.add(ds.getValue().toString());
+                }
+                ArrayList<Voluntariat> voluntariatArrayList = new ArrayList<>();
+                for(Voluntariat vol : Voluntariat.getDataSet()){
+                    if(listVol.contains(vol.getId_vol())){
+                        voluntariatArrayList.add(vol);
+                    }
+                }
+                mAdapter = new SmallEntryAdapter(voluntariatArrayList);
+                recyclerView.setAdapter(mAdapter);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         //NAV STUFF
         Toolbar toolbar = findViewById(R.id.toolbar_main);
