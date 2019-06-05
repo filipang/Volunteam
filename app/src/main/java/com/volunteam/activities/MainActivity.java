@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.UserManager;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -186,9 +187,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         dataSnapshot.child("email").getValue().toString(),
                         new ArrayList<Integer>(),
                         dataSnapshot.getKey());
-                for(Object x : dataSnapshot.child("voluntariate").getChildren()) {
-                    Log.d("HEY", "AT LEAST WE KNOW SOMETHING HAPPENED?");
-                    User.currentUser.voluntariate.add(Integer.parseInt(x.toString()));
+                for(DataSnapshot x : dataSnapshot.child("voluntariate").getChildren()) {
+                    User.currentUser.voluntariate.add(Integer.parseInt(x.getValue().toString()));
                 }
                 TextView textViewHeader = findViewById(R.id.nav_header_textView);
                 textViewHeader.setText(User.currentUser.lastName + " " + User.currentUser.firstName);

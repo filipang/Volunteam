@@ -128,6 +128,9 @@ public class VoluntariatActivity extends AppCompatActivity implements Navigation
                             TextView textEmail = (TextView) row.getChildAt(2);
                             TextView textAcc = (TextView) row.getChildAt(3);
                             TextView textRef = (TextView) row.getChildAt(4);
+                            textFirst.setText(dataSnapshot.child("firstName").getValue().toString());
+                            textLast.setText(dataSnapshot.child("lastName").getValue().toString());
+                            textEmail.setText(dataSnapshot.child("email").getValue().toString());
                             table.removeView(row);
                             table.addView(row,0);
 
