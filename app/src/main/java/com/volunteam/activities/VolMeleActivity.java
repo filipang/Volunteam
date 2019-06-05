@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.volunteam.R;
 import com.volunteam.components.FirebaseHandler;
+import com.volunteam.components.MyAdapter;
 import com.volunteam.components.SmallEntryAdapter;
 import com.volunteam.components.Voluntariat;
 
@@ -35,6 +36,7 @@ public class VolMeleActivity extends AppCompatActivity implements NavigationView
     ActionBarDrawerToggle toggle;
     RecyclerView recyclerView;
     RecyclerView.Adapter mAdapter;
+    SmallEntryAdapter myAdapter; //Same as mAdapter
     RecyclerView.LayoutManager layoutManager;
 
     @Override
@@ -60,11 +62,12 @@ public class VolMeleActivity extends AppCompatActivity implements NavigationView
                 }
                 ArrayList<Voluntariat> voluntariatArrayList = new ArrayList<>();
                 for(Voluntariat vol : Voluntariat.getDataSet()){
-                    if(listVol.contains(vol.getId_vol())){
+                    if(listVol.contains(vol.getId_vol().toString())){
                         voluntariatArrayList.add(vol);
                     }
                 }
-                mAdapter = new SmallEntryAdapter(voluntariatArrayList);
+                myAdapter = new SmallEntryAdapter(voluntariatArrayList);
+                mAdapter = myAdapter;
                 recyclerView.setAdapter(mAdapter);
 
             }
@@ -89,6 +92,42 @@ public class VolMeleActivity extends AppCompatActivity implements NavigationView
         //SEARCH BAR SETUP
         SearchView searchView = findViewById(R.id.search_view);
         searchView.setVisibility(View.VISIBLE);
+        final RecyclerView.Adapter finalAdapter =  mAdapter;
+        final SmallEntryAdapter myFinalAdapter = myAdapter;
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+
+                myFinalAdapter.mDataSet = (ArrayList<Voluntariat>) Voluntariat.getDataSet().clone();
+                finalAdapter.notifyDataSetChanged();
+                return false;
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //SORT DATA SET
+                ArrayList<Voluntariat> filteredList = (ArrayList<Voluntariat>) Voluntariat.getDataSet().clone();
+                if(!query.equals("")) {
+                    for (Voluntariat vol : Voluntariat.getDataSet()) {
+                        if (!(vol.getDescription().toLowerCase().contains(query.toLowerCase()) || vol.getName().toLowerCase().contains(query))) {
+                            filteredList.remove(vol);
+                        }
+                    }
+                }
+                myFinalAdapter.mDataSet = filteredList;
+                finalAdapter.notifyDataSetChanged();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+
+        });
     }
 
     //Navigation stuff

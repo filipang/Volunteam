@@ -21,7 +21,7 @@ import java.util.List;
 
 public class SmallEntryAdapter extends RecyclerView.Adapter<SmallEntryAdapter.MyViewHolder> {
 
-    List<Voluntariat> mDataSet;
+    public List<Voluntariat> mDataSet;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
@@ -69,7 +69,7 @@ public class SmallEntryAdapter extends RecyclerView.Adapter<SmallEntryAdapter.My
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(v.getContext(), VoluntariatActivity.class);
-                                intent.putExtra("voluntariat", vol);
+                                intent.putExtra("voluntariat", vol.getId_vol());
                                 v.getContext().startActivity(intent);
                             }
                         };
