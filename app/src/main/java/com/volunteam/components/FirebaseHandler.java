@@ -1,8 +1,10 @@
 package com.volunteam.components;
 
 import android.support.annotation.NonNull;
+import android.support.v4.view.PagerAdapter;
 import android.util.JsonReader;
 import android.util.Log;
+import android.webkit.URLUtil;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,22 +45,36 @@ public class FirebaseHandler {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ArrayList<Voluntariat> voluntariatArrayList = new ArrayList<>();
                 Log.d("HOW MANYY??", "THIS MANY: " + dataSnapshot.child("Voluntariate").getChildren());
+                for (DataSnapshot ds : dataSnapshot.getChildren()) Log.d("debugare", ds.getKey());
                 for(DataSnapshot ds : dataSnapshot.child("Voluntariate").getChildren()){
                     Voluntariat vol = new Voluntariat();
 
                     vol.setId_vol(Integer.parseInt(ds.child("id_vol").getValue().toString()));
                     vol.setName(ds.child("name").getValue().toString());
-                    vol.setImageURL(ds.child("imageURL").getValue().toString());
                     vol.setImageList(new ArrayList<String>());
-                    vol.getImageList().add(vol.getImageURL());
-                    vol.getImageList().add(ds.child("imageURL1").getValue().toString());
-                    vol.getImageList().add(ds.child("imageURL2").getValue().toString());
-                    vol.getImageList().add(ds.child("imageURL3").getValue().toString());
-                    vol.getImageList().add(ds.child("imageURL4").getValue().toString());
-                    vol.getImageList().add(ds.child("imageURL5").getValue().toString());
+                    if(URLUtil.isValidUrl(ds.child("imageURL").getValue().toString())) {
+                        vol.setImageURL(ds.child("imageURL").getValue().toString());
+                        vol.getImageList().add(vol.getImageURL());
+                    }
+                    else{
+                        vol.setImageURL("https://twt-thumbs.washtimes.com/media/image/2017/12/04/charity_139519124_c0-27-1000-610_s885x516.jpg?949041b076b454e3e5f1da61a91f9d631dac3264");
+                        vol.getImageList().add("https://twt-thumbs.washtimes.com/media/image/2017/12/04/charity_139519124_c0-27-1000-610_s885x516.jpg?949041b076b454e3e5f1da61a91f9d631dac3264");
+                    }
+                    if(URLUtil.isValidUrl(ds.child("imageURL1").getValue().toString()))vol.getImageList().add(ds.child("imageURL1").getValue().toString());
+                    if(URLUtil.isValidUrl(ds.child("imageURL2").getValue().toString()))vol.getImageList().add(ds.child("imageURL2").getValue().toString());
+                    if(URLUtil.isValidUrl(ds.child("imageURL3").getValue().toString()))vol.getImageList().add(ds.child("imageURL3").getValue().toString());
+                    if(URLUtil.isValidUrl(ds.child("imageURL4").getValue().toString()))vol.getImageList().add(ds.child("imageURL4").getValue().toString());
+                    if(URLUtil.isValidUrl(ds.child("imageURL5").getValue().toString()))vol.getImageList().add(ds.child("imageURL5").getValue().toString());
                     vol.setDescription(ds.child("description").getValue().toString());
                     vol.setDate(new Date(ds.child("day").getValue().toString(), ds.child("month").getValue().toString(),  ds.child("year").getValue().toString()));
                     vol.setId_user(ds.child("organizer").getValue().toString());
+                    ArrayList<String> user_list = new ArrayList<>();
+                    if(ds.child("users").getChildren()!=null) {
+                        for (DataSnapshot snapshot : ds.child("users").getChildren()) {
+                            user_list.add(snapshot.getValue().toString());
+                        }
+                    }
+                    vol.userList = user_list;
                     //vol.setLink(ds.child("link").getValue().toString());
                     vol.setDrawable(Voluntariat.loadDrawableFromURL(vol.getImageURL()));
                     voluntariatArrayList.add(vol);

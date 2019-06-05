@@ -69,7 +69,7 @@
                         <RatingBar
                             android:id="@+id/ratingBar"
                             style="@style/Widget.AppCompat.RatingBar.Small"
-                            android:layout_width="93dp"
+                            android:layout_width="78dp"
                             android:layout_height="wrap_content"
                             android:numStars="5"
                             android:rating="4.5" />
@@ -93,7 +93,7 @@
                     android:text="14 iunie, 2019" />
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/text_inscriere"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -106,7 +106,7 @@
                     android:visibility="visible" />
 
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/button_inscriere"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -167,6 +167,12 @@
                     android:layout_marginBottom="30dp"
                     android:autoLink="web"
                     android:text="https://stackoverflow.com/questions/16927103/onclicklistener-in-android-studio" />
+
+                <TableLayout
+                    android:id="@+id/table"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="20dp"/>
             </LinearLayout>
         </ScrollView>
 
@@ -221,7 +227,8 @@
                     android:layout_marginLeft="20dp"
                     android:gravity="center|start"
                     android:text="Deconectare"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>

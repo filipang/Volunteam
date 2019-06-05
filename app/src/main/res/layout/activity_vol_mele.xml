@@ -113,7 +113,8 @@
                     android:layout_marginLeft="20dp"
                     android:gravity="center|start"
                     android:text="Deconectare"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>

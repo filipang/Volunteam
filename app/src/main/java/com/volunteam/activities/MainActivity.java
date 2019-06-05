@@ -1,13 +1,17 @@
 package com.volunteam.activities;
 
+import android.content.ContentProvider;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.UserManager;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,12 +34,20 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.volunteam.R;
+import com.volunteam.components.Date;
+import com.volunteam.components.FirebaseHandler;
 import com.volunteam.components.MyAdapter;
+import com.volunteam.components.User;
 import com.volunteam.components.Voluntariat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -52,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //RECYCLERVIEW SETUP
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
@@ -72,11 +86,89 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.main_spinner_list, R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("sort pls", "SORT???");
+                switch (position){
+                    case 0:
+                        //SORT BY POPULARITY
+                        Log.d("sort pls", "SORT 0");
+                        Comparator<Voluntariat> comparator = new Comparator<Voluntariat>() {
+                            @Override
+                            public int compare(Voluntariat o1, Voluntariat o2) {
+                                return o1.userList.size() - o2.userList.size();
+                            }
+                        };
+                        Collections.sort(myAdapter.mDataSet, comparator);
+                        Collections.sort(Voluntariat.getDataSet(), comparator);
+                        myAdapter.notifyDataSetChanged();
+                        break;
+                    case 1:
+                        //SORT ASCENDING BY DATE
+                        Log.d("sort pls", "SORT 1");
+                        Comparator<Voluntariat> comparator_date_cresc = new Comparator<Voluntariat>() {
+                            @Override
+                            public int compare(Voluntariat o1, Voluntariat o2) {
+                                Date d1 = o1.getDate(); Date d2 = o2.getDate();
+                                Date max = Date.max(d1,d2);
+                                if(max == null){
+                                    return 0;
+                                }
+                                else {
+                                    if(max == d1){
+                                        return 1;
+                                    }
+                                    else{
+                                        return -1;
+                                    }
+
+                                }
+                            }
+                        };
+                        Collections.sort(myAdapter.mDataSet, comparator_date_cresc);
+                        Collections.sort(Voluntariat.getDataSet(), comparator_date_cresc);
+                        myAdapter.notifyDataSetChanged();
+                        break;
+                    case 2:
+                        //SORT DESCENDING BY DATE
+                        Log.d("sort pls", "SORT 2");
+                        Comparator<Voluntariat> comparator_date_descresc = new Comparator<Voluntariat>() {
+                            @Override
+                            public int compare(Voluntariat o1, Voluntariat o2) {
+                                Date d1 = o1.getDate(); Date d2 = o2.getDate();
+                                Date max = Date.max(d1,d2);
+                                if(max == null){
+                                    return 0;
+                                }
+                                else {
+                                    if(max == d1){
+                                        return -1;
+                                    }
+                                    else{
+                                        return 1;
+                                    }
+
+                                }
+                            }
+                        };
+                        Collections.sort(myAdapter.mDataSet, comparator_date_descresc);
+                        Collections.sort(Voluntariat.getDataSet(), comparator_date_descresc);
+                        myAdapter.notifyDataSetChanged();
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         //Image loading is done on separate slide to avoid NetworkingOnMainThreadException
         //new Thread(new GetImageTask()).start();
 
-        //NAV STUFF
+        //NAVIGATION SETUP
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.drawer_layout);
@@ -87,6 +179,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView nav = findViewById(R.id.nav_view);
         nav.setNavigationItemSelectedListener(this);
 
+        FirebaseHandler.getFirebaseHandler().getReference().child("Users").child(FirebaseHandler.getFirebaseHandler().getAuth().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User.currentUser = new User(dataSnapshot.child("firstName").getValue().toString(),
+                        dataSnapshot.child("lastName").getValue().toString(),
+                        dataSnapshot.child("email").getValue().toString(),
+                        new ArrayList<Integer>(),
+                        dataSnapshot.getKey());
+                for(DataSnapshot x : dataSnapshot.child("voluntariate").getChildren()) {
+                    User.currentUser.voluntariate.add(Integer.parseInt(x.getValue().toString()));
+                }
+                TextView textViewHeader = findViewById(R.id.nav_header_textView);
+                textViewHeader.setText(User.currentUser.lastName + " " + User.currentUser.firstName);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         //SEARCH BAR SETUP
 
         SearchView searchView = findViewById(R.id.search_view);
@@ -111,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ArrayList<Voluntariat> filteredList = (ArrayList<Voluntariat>) Voluntariat.getDataSet().clone();
                 if(!query.equals("")) {
                     for (Voluntariat vol : Voluntariat.getDataSet()) {
-                        if (!(vol.getDescription().contains(query) || vol.getName().contains(query))) {
+                        if (!(vol.getDescription().toLowerCase().contains(query.toLowerCase()) || vol.getName().toLowerCase().contains(query))) {
                             filteredList.remove(vol);
                         }
                     }
@@ -185,58 +297,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
-    //!!!!
-
-    //Task that loads Image solving threading/UI/Networking issues
-    /*
-    class GetImageTask implements Runnable {
-
-        private Handler handler;
-
-        public GetImageTask() {
-
-            //Handler is set to execute on UI/main thread
-            handler = new Handler(Looper.getMainLooper());
-        }
-
-        @Override
-        public void run() {
-            for (Voluntariat vol : Voluntariat.getTestList()) {
-                vol.setDrawable(Voluntariat.loadDrawableFromURL(vol.getImageURL()));
-            }
-
-            //After drawable is loaded, start updating the UI in the UI thread, using a handler
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-
-                    LinearLayout scrollList  = findViewById(R.id.vol_scroll_list);
-                    Voluntariat[] voluntariatList = Voluntariat.getTestList(); // = DatabaseHandler.fetchVoluntariatList(User.me);
-
-                    for (Voluntariat vol : voluntariatList) {
-
-                        //Create entry
-                        LayoutInflater inflater = getLayoutInflater();
-                        LinearLayout element = (LinearLayout) inflater.inflate(R.layout.vol_entry, scrollList, false);
-                        scrollList.addView(element);
-
-                        TextView textView = (TextView) element.getChildAt(1);
-                        textView.setText(vol.getDescription());
-
-                        ImageView img = (ImageView) element.getChildAt(2);
-                        img.setImageDrawable(vol.getDrawable());
-
-                        TextView textView1 = (TextView) element.getChildAt(3);
-                        textView1.setText(vol.getName());
-
-                        ImageView img1 = (ImageView) ((ViewGroup)element.getChildAt(0)).getChildAt(0);
-                        img1.setImageDrawable(vol.getDrawable());
-                    }
-                }
-            });
-        }
-
-    }
-    */
 }
 

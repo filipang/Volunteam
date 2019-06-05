@@ -16,6 +16,34 @@ public class Date implements Serializable {
         this.year = year;
     }
 
+    public static Date max(Date d1, Date d2){
+        if(Integer.parseInt(d1.year)!=Integer.parseInt(d2.year)){
+            if(Integer.parseInt(d1.year)>Integer.parseInt(d2.year)) {
+                return d1;
+            }
+            else {
+                return d2;
+            }
+        }
+        if(Integer.parseInt(d1.year)!=Integer.parseInt(d2.year)){
+            if(Integer.parseInt(d1.year)>Integer.parseInt(d2.year)){
+                return d1;
+            }
+            else {
+                return d2;
+            }
+        }
+        if(Integer.parseInt(d1.month)!=Integer.parseInt(d2.month)){
+            if(Integer.parseInt(d1.month)>Integer.parseInt(d2.month)){
+                return d1;
+            }
+            else{
+                return d2;
+            }
+        }
+        return null;
+    }
+
     public String getDay() {
         return day;
     }

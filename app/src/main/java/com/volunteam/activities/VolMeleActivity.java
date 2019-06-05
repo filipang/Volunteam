@@ -46,7 +46,9 @@ public class VolMeleActivity extends AppCompatActivity implements NavigationView
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        mAdapter = new SmallEntryAdapter(Voluntariat.getDataSet());
+
+        ArrayList<Voluntariat> listVol = new ArrayList<Voluntariat>();
+        mAdapter = new SmallEntryAdapter();
         recyclerView.setAdapter(mAdapter);
 
         //NAV STUFF

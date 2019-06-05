@@ -97,9 +97,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void storeUserInDatabase() {
         final User user = new User(etFirstName.getText().toString(), etLastName.getText().toString(), etEmail.getText().toString(), null, null);
 
-        userDatabase.child("Users").child(mAuth.getCurrentUser().getUid())
-                .setValue(user)
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+        userDatabase.child("Users").child(mAuth.getCurrentUser().getUid()).setValue(user).addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()) {
