@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.SearchView;
 
 import com.volunteam.R;
 
@@ -35,6 +37,10 @@ public class ProfilActivity extends AppCompatActivity implements NavigationView.
         getSupportActionBar().setHomeButtonEnabled(true);
         NavigationView nav = findViewById(R.id.nav_view);
         nav.setNavigationItemSelectedListener(this);
+
+        //DISABLE SEARCH BAR
+        SearchView searchView = findViewById(R.id.search_view);
+        if(searchView!=null)searchView.setVisibility(View.GONE);
     }
 
     //Navigation stuff

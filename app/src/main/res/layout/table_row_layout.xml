@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:text="Angheluta"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:text="Filip"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:text="smart.filip48@gmail.com"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/text_button_accept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:background="@color/colorPrimaryLightDark"
+        android:text="ACCEPTA"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/text_button_refuse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:background="@color/colorPrimaryLightDark"
+        android:text="REFUZA"
+        android:textSize="10sp" />
+
+</TableRow>

@@ -34,11 +34,14 @@ public class Voluntariat implements Serializable {
     private Date date;
     private String link;
     private User user;
+    public ArrayList<String> userList;
 
     public Voluntariat(){
+        userList = new ArrayList<>();
     }
 
     public Voluntariat(Integer id_vol, String id_user, String name, String imageURL, List<String> imageList, String description, Boolean amISigned, String day, String month, String year, String link) {
+        userList = new ArrayList<>();
         this.id_vol = id_vol;
         this.id_user = id_user;
         this.name = name;

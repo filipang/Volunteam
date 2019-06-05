@@ -62,7 +62,8 @@
                 android:layout_marginRight="15dp"
                 android:ems="10"
                 android:hint="Descriere"
-                android:inputType="textPersonName" />
+                android:inputType="textMultiLine|textPersonName"
+                android:singleLine="false" />
 
             <EditText
                 android:id="@+id/imageURL"
@@ -223,7 +224,8 @@
                     android:layout_marginLeft="20dp"
                     android:gravity="center|start"
                     android:text="Deconectare"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>

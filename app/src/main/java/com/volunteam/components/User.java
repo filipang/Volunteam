@@ -6,21 +6,24 @@ import java.util.List;
 
 public class User {
 
+    public static User currentUser;
+
     public String firstName;
     public String lastName;
     public String email;
     public List<Integer> voluntariate;
+    public String id;
     public String pozaURL;
     public Drawable drawable;
 
     public User() {}
 
-    public User(String firstName, String lastName, String email, List<Integer> voluntariate, String pozaURL) {
+    public User(String firstName, String lastName, String email, List<Integer> voluntariat, String id) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.voluntariate = voluntariate;
-        this.pozaURL = pozaURL;
+        this.voluntariate = voluntariat;
+        this.id = id;
     }
 
     public String getFirstName() {
