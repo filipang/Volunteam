@@ -40,6 +40,20 @@ public class ToateVolActivity extends AppCompatActivity implements NavigationVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_toate_vol);
 
+        //DECONECTARE BUTTON SETUP
+        View img = findViewById(R.id.imgdeconctare);
+        View txt = findViewById(R.id.logout);
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        };
+        img.setOnClickListener(listener);
+        txt.setOnClickListener(listener);
+
+
         //RECYCLERVIEW SETUP
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
@@ -48,7 +62,8 @@ public class ToateVolActivity extends AppCompatActivity implements NavigationVie
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        mAdapter = new SmallEntryAdapter(Voluntariat.getDataSet());
+        myAdapter = new SmallEntryAdapter(Voluntariat.getDataSet());
+        mAdapter = myAdapter;
         recyclerView.setAdapter(mAdapter);
 
         //NAV STUFF

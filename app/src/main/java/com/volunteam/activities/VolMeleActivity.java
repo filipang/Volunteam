@@ -44,6 +44,21 @@ public class VolMeleActivity extends AppCompatActivity implements NavigationView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vol_mele);
 
+        //DECONECTARE BUTTON SETUP
+        View img = findViewById(R.id.imgdeconctare);
+        View txt = findViewById(R.id.logout);
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        };
+        img.setOnClickListener(listener);
+        txt.setOnClickListener(listener);
+
+
+
         //RECYCLERVIEW SETUP
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 

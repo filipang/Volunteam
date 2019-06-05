@@ -101,7 +101,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()) {
-                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                         } else {
                             String error = task.getException().getMessage();
                             Toast.makeText(RegisterActivity.this, error, Toast.LENGTH_SHORT).show();

@@ -45,6 +45,21 @@ public class VoluntariatActivity extends AppCompatActivity implements Navigation
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voluntariat);
 
+
+        //DECONECTARE BUTTON SETUP
+        View img = findViewById(R.id.imgdeconctare);
+        View txt = findViewById(R.id.logout);
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        };
+        img.setOnClickListener(listener);
+        txt.setOnClickListener(listener);
+
+
         Integer vol_int = Integer.parseInt(getIntent().getExtras().get("voluntariat").toString());
         final Voluntariat vol = Voluntariat.getDataSet().get(vol_int);
         //Design

@@ -27,6 +27,20 @@ public class ProfilActivity extends AppCompatActivity implements NavigationView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profil);
 
+        //DECONECTARE BUTTON SETUP
+        View img = findViewById(R.id.imgdeconctare);
+        View txt = findViewById(R.id.logout);
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        };
+        img.setOnClickListener(listener);
+        txt.setOnClickListener(listener);
+
+
         //NAV STUFF
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);

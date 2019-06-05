@@ -48,7 +48,6 @@ public class ValidateActivity extends AppCompatActivity implements View.OnClickL
         mDatabase = FirebaseDatabase.getInstance();
         volDatabase = mDatabase.getReference();
         lastOne = mDatabase.getReference();
-
         name = (EditText)findViewById(R.id.name);
         imageURL = (EditText)findViewById(R.id.imageURL);
         imageURL1 = (EditText)findViewById(R.id.imageURL1);
@@ -62,8 +61,21 @@ public class ValidateActivity extends AppCompatActivity implements View.OnClickL
         month = (EditText)findViewById(R.id.month);
         year = (EditText)findViewById(R.id.year);
         link = (EditText)findViewById(R.id.link);
-
         getConfirmation.setOnClickListener(this);
+
+        //DECONECTARE BUTTON SETUP
+        View img = findViewById(R.id.imgdeconctare);
+        View txt = findViewById(R.id.logout);
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        };
+        img.setOnClickListener(listener);
+        txt.setOnClickListener(listener);
+
 
         //NAV STUFF
         Toolbar toolbar = findViewById(R.id.toolbar_main);
