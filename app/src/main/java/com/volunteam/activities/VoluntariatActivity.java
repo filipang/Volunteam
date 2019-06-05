@@ -62,6 +62,12 @@ public class VoluntariatActivity extends AppCompatActivity implements Navigation
 
         Integer vol_int = Integer.parseInt(getIntent().getExtras().get("voluntariat").toString());
         final Voluntariat vol = Voluntariat.getDataSet().get(vol_int);
+
+        //Cod setup data
+        TextView textViewData = findViewById(R.id.textViewDataVol);
+        textViewData.setText(vol.getDate().day + "/" +vol.getDate().month + "/" +vol.getDate().year);
+
+
         //Design
 
         TextView text_titlu = findViewById(R.id.text_titlu);
