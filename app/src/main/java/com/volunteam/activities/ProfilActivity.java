@@ -64,7 +64,7 @@ public class ProfilActivity extends AppCompatActivity implements NavigationView.
         //PROFILE DETAILS SETUP
         TextView number = findViewById(R.id.textViewNoVoluntariate);
         TextView name = findViewById(R.id.textProfileName);
-        number.setText(User.currentUser.voluntariate.size());
+        number.setText(""+User.currentUser.voluntariate.size());
         name.setText(User.currentUser.lastName + " " + User.currentUser.firstName);
 
     }
