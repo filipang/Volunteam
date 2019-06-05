@@ -32,6 +32,7 @@ public class ToateVolActivity extends AppCompatActivity implements NavigationVie
     ActionBarDrawerToggle toggle;
     RecyclerView recyclerView;
     RecyclerView.Adapter mAdapter;
+    SmallEntryAdapter myAdapter; //Same as mAdapter
     RecyclerView.LayoutManager layoutManager;
 
     @Override
@@ -64,6 +65,42 @@ public class ToateVolActivity extends AppCompatActivity implements NavigationVie
         //SEARCH BAR SETUP
         SearchView searchView = findViewById(R.id.search_view);
         searchView.setVisibility(View.VISIBLE);
+        final RecyclerView.Adapter finalAdapter =  mAdapter;
+        final SmallEntryAdapter myFinalAdapter = myAdapter;
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+
+                myFinalAdapter.mDataSet = (ArrayList<Voluntariat>) Voluntariat.getDataSet().clone();
+                finalAdapter.notifyDataSetChanged();
+                return false;
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //SORT DATA SET
+                ArrayList<Voluntariat> filteredList = (ArrayList<Voluntariat>) Voluntariat.getDataSet().clone();
+                if(!query.equals("")) {
+                    for (Voluntariat vol : Voluntariat.getDataSet()) {
+                        if (!(vol.getDescription().toLowerCase().contains(query.toLowerCase()) || vol.getName().toLowerCase().contains(query))) {
+                            filteredList.remove(vol);
+                        }
+                    }
+                }
+                myFinalAdapter.mDataSet = filteredList;
+                finalAdapter.notifyDataSetChanged();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+
+        });
     }
 
     //Navigation stuff

@@ -60,16 +60,55 @@ public class VolMeleActivity extends AppCompatActivity implements NavigationView
                 for(DataSnapshot ds : dataSnapshot.child("Users").child(FirebaseHandler.getFirebaseHandler().getAuth().getUid()).child("voluntariate").getChildren()){
                     listVol.add(ds.getValue().toString());
                 }
-                ArrayList<Voluntariat> voluntariatArrayList = new ArrayList<>();
+                final ArrayList<Voluntariat> voluntariatArrayList = new ArrayList<>();
                 for(Voluntariat vol : Voluntariat.getDataSet()){
                     if(listVol.contains(vol.getId_vol().toString())){
                         voluntariatArrayList.add(vol);
                     }
                 }
-                myAdapter = new SmallEntryAdapter(voluntariatArrayList);
+                myAdapter = new SmallEntryAdapter((ArrayList<Voluntariat>)voluntariatArrayList.clone());
                 mAdapter = myAdapter;
                 recyclerView.setAdapter(mAdapter);
 
+                //SEARCH BAR SETUP
+                SearchView searchView = findViewById(R.id.search_view);
+                searchView.setVisibility(View.VISIBLE);
+                final RecyclerView.Adapter finalAdapter =  mAdapter;
+                final SmallEntryAdapter myFinalAdapter = myAdapter;
+
+                searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+                    @Override
+                    public boolean onClose() {
+
+                        myFinalAdapter.mDataSet = (ArrayList<Voluntariat>) voluntariatArrayList.clone();
+                        finalAdapter.notifyDataSetChanged();
+                        return false;
+                    }
+                });
+
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        //SORT DATA SET
+                        ArrayList<Voluntariat> filteredList = (ArrayList<Voluntariat>) Voluntariat.getDataSet().clone();
+                        if(!query.equals("")) {
+                            for (Voluntariat vol : Voluntariat.getDataSet()) {
+                                if (!(vol.getDescription().toLowerCase().contains(query.toLowerCase()) || vol.getName().toLowerCase().contains(query))) {
+                                    filteredList.remove(vol);
+                                }
+                            }
+                        }
+                        myFinalAdapter.mDataSet = filteredList;
+                        finalAdapter.notifyDataSetChanged();
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        return false;
+                    }
+
+                });
             }
 
             @Override
@@ -89,45 +128,7 @@ public class VolMeleActivity extends AppCompatActivity implements NavigationView
         NavigationView nav = findViewById(R.id.nav_view);
         nav.setNavigationItemSelectedListener(this);
 
-        //SEARCH BAR SETUP
-        SearchView searchView = findViewById(R.id.search_view);
-        searchView.setVisibility(View.VISIBLE);
-        final RecyclerView.Adapter finalAdapter =  mAdapter;
-        final SmallEntryAdapter myFinalAdapter = myAdapter;
 
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-
-                myFinalAdapter.mDataSet = (ArrayList<Voluntariat>) Voluntariat.getDataSet().clone();
-                finalAdapter.notifyDataSetChanged();
-                return false;
-            }
-        });
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                //SORT DATA SET
-                ArrayList<Voluntariat> filteredList = (ArrayList<Voluntariat>) Voluntariat.getDataSet().clone();
-                if(!query.equals("")) {
-                    for (Voluntariat vol : Voluntariat.getDataSet()) {
-                        if (!(vol.getDescription().toLowerCase().contains(query.toLowerCase()) || vol.getName().toLowerCase().contains(query))) {
-                            filteredList.remove(vol);
-                        }
-                    }
-                }
-                myFinalAdapter.mDataSet = filteredList;
-                finalAdapter.notifyDataSetChanged();
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-
-        });
     }
 
     //Navigation stuff
