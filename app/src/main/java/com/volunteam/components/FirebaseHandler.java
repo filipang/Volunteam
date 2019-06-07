@@ -47,6 +47,7 @@ public class FirebaseHandler {
                 Log.d("HOW MANYY??", "THIS MANY: " + dataSnapshot.child("Voluntariate").getChildren());
                 for (DataSnapshot ds : dataSnapshot.getChildren()) Log.d("debugare", ds.getKey());
                 for(DataSnapshot ds : dataSnapshot.child("Voluntariate").getChildren()){
+                    Log.d("Children", "WE GOT +ONE!");
                     Voluntariat vol = new Voluntariat();
 
                     vol.setId_vol(Integer.parseInt(ds.child("id_vol").getValue().toString()));

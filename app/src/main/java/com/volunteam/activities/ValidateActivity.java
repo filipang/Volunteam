@@ -129,6 +129,7 @@ public class ValidateActivity extends AppCompatActivity implements View.OnClickL
                                                            dataSnapshot.getValue();
                                                            Log.d("pula", "" + dataSnapshot.getValue());
                                                            volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("id_vol").setValue(Integer.parseInt(dataSnapshot.getValue().toString()));
+                                                           volDatabase.child("LastVolID").setValue(Integer.parseInt(dataSnapshot.getValue().toString()) + 1);
                                                            volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("name").setValue(name.getText().toString());
                                                            volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL").setValue(imageURL.getText().toString());
                                                            volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL1").setValue(imageURL1.getText().toString());
