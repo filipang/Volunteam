@@ -22,10 +22,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.volunteam.R;
+import com.volunteam.components.NavigationManager;
 import com.volunteam.components.User;
 
 
-public class ValidateActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+public class ValidateActivity extends AppCompatActivity implements View.OnClickListener {
 
     public FirebaseUser usr = FirebaseAuth.getInstance().getCurrentUser();
     public FirebaseDatabase mDatabase;
@@ -34,6 +35,7 @@ public class ValidateActivity extends AppCompatActivity implements View.OnClickL
 
     DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
+    NavigationManager navigationManager;
 
     public EditText name, imageURL, imageURL1, imageURL2, imageURL3, imageURL4, imageURL5, description,
             link, day, month, year;
@@ -44,6 +46,10 @@ public class ValidateActivity extends AppCompatActivity implements View.OnClickL
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_validate);
+
+        //Add side bar to this activity
+        navigationManager = new NavigationManager(this);
+        navigationManager.createNavBar();
 
         mDatabase = FirebaseDatabase.getInstance();
         volDatabase = mDatabase.getReference();
@@ -76,80 +82,39 @@ public class ValidateActivity extends AppCompatActivity implements View.OnClickL
         img.setOnClickListener(listener);
         txt.setOnClickListener(listener);
 
-
-        //NAV STUFF
-        Toolbar toolbar = findViewById(R.id.toolbar_main);
-        setSupportActionBar(toolbar);
-        drawer = findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        NavigationView nav = findViewById(R.id.nav_view);
-        nav.setNavigationItemSelectedListener(this);
-
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        Log.d("click", "SOMETHING SOMETHING AT LEAST!???  " + menuItem.getOrder());
-        Intent intent;
-        switch (menuItem.getItemId()){
-            case R.id.menu_exploreaza:
-                intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.menu_toate_vol:
-                intent = new Intent(this, ToateVolActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.menu_vol_mele:
-                intent = new Intent(this, VolMeleActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.menu_profil:
-                intent = new Intent(this, ProfilActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.menu_organizeaza_voluntariat:
-                intent = new Intent(this, ValidateActivity.class);
-                startActivity(intent);
-                break;
-        }
-        return true;
     }
 
     public void storeVolInDatabase() {
 
 
         volDatabase.child("LastVolID").addListenerForSingleValueEvent(new ValueEventListener() {
-                                                       @Override
-                                                       public void onDataChange(DataSnapshot dataSnapshot) {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                                           dataSnapshot.getValue();
-                                                           Log.d("pula", "" + dataSnapshot.getValue());
-                                                           volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("id_vol").setValue(Integer.parseInt(dataSnapshot.getValue().toString()));
-                                                           volDatabase.child("LastVolID").setValue(Integer.parseInt(dataSnapshot.getValue().toString()) + 1);
-                                                           volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("name").setValue(name.getText().toString());
-                                                           volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL").setValue(imageURL.getText().toString());
-                                                           volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL1").setValue(imageURL1.getText().toString());
-                                                           volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL2").setValue(imageURL2.getText().toString());
-                                                           volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL3").setValue(imageURL3.getText().toString());
-                                                           volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL4").setValue(imageURL4.getText().toString());
-                                                           volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL5").setValue(imageURL5.getText().toString());
-                                                           volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("description").setValue(description.getText().toString());
-                                                           volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("day").setValue(day.getText().toString());
-                                                           volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("month").setValue(month.getText().toString());
-                                                           volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("year").setValue(year.getText().toString());
-                                                           volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("organizer").setValue(usr.getUid());
-                                                           volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("link").setValue(link.getText().toString());
-                                                       }
+                dataSnapshot.getValue();
+                Log.d("pula", "" + dataSnapshot.getValue());
+                volDatabase.child("LastVolID").setValue(Integer.parseInt(dataSnapshot.getValue().toString()) + 1);
+                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("id_vol").setValue(Integer.parseInt(dataSnapshot.getValue().toString()));
+                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("name").setValue(name.getText().toString());
+                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL").setValue(imageURL.getText().toString());
+                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL1").setValue(imageURL1.getText().toString());
+                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL2").setValue(imageURL2.getText().toString());
+                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL3").setValue(imageURL3.getText().toString());
+                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL4").setValue(imageURL4.getText().toString());
+                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL5").setValue(imageURL5.getText().toString());
+                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("description").setValue(description.getText().toString());
+                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("day").setValue(day.getText().toString());
+                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("month").setValue(month.getText().toString());
+                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("year").setValue(year.getText().toString());
+                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("organizer").setValue(usr.getUid());
+                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("link").setValue(link.getText().toString());
+            }
 
-                                                       @Override
-                                                       public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                                                       }
-                                                   });
+            }
+        });
 
 
 
@@ -160,6 +125,16 @@ public class ValidateActivity extends AppCompatActivity implements View.OnClickL
         if(v.getId() == R.id.post) {
             storeVolInDatabase();
             startActivity(new Intent(ValidateActivity.this, MainActivity.class));
+        }
+    }
+
+    //Navigation related
+    @Override
+    public void onBackPressed() {
+        if (navigationManager.isDrawerOpen()) {
+            navigationManager.closeDrawer();
+        } else {
+            super.onBackPressed();
         }
     }
 }

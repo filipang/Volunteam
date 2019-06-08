@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.volunteam.R;
 import com.volunteam.components.FirebaseHandler;
 import com.volunteam.components.ImageSlideAdapter;
+import com.volunteam.components.NavigationManager;
 import com.volunteam.components.User;
 import com.volunteam.components.Voluntariat;
 
@@ -35,16 +36,20 @@ import java.util.Arrays;
 import java.util.Collection;
 
 
-public class VoluntariatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class VoluntariatActivity extends AppCompatActivity{
 
     DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
+    NavigationManager navigationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voluntariat);
 
+        //Add side bar to this activity
+        navigationManager = new NavigationManager(this);
+        navigationManager.createNavBar();
 
         //DECONECTARE BUTTON SETUP
         View img = findViewById(R.id.imgdeconctare);
@@ -81,17 +86,6 @@ public class VoluntariatActivity extends AppCompatActivity implements Navigation
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new ImageSlideAdapter(this, vol));
 
-
-        //NAV STUFF
-        Toolbar toolbar = findViewById(R.id.toolbar_main);
-        setSupportActionBar(toolbar);
-        drawer = findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        NavigationView nav = findViewById(R.id.nav_view);
-        nav.setNavigationItemSelectedListener(this);
         FirebaseHandler.getFirebaseHandler().getReference().child("Users").child(vol.getId_user()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -214,65 +208,15 @@ public class VoluntariatActivity extends AppCompatActivity implements Navigation
     }
 
 
-    //Navigation stuff
-    @Override
-    public void onPostCreate(Bundle savedInstanceState) {
-        Log.d("click", "XDD1");
-        super.onPostCreate(savedInstanceState);
-        toggle.syncState();
-    }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        Log.d("click", "XDDD2");
-        super.onConfigurationChanged(newConfig);
-        toggle.onConfigurationChanged(newConfig);
-    }
 
+    //Navigation related
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        Log.d("click", "AAAA" + item.getItemId());
-        if (toggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        Log.d("click", "SOMETHING SOMETHING AT LEAST!???  " + menuItem.getOrder());
-        Intent intent;
-        switch (menuItem.getItemId()){
-            case R.id.menu_exploreaza:
-                intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.menu_toate_vol:
-                intent = new Intent(this, ToateVolActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.menu_vol_mele:
-                intent = new Intent(this, VolMeleActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.menu_profil:
-                intent = new Intent(this, ProfilActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.menu_organizeaza_voluntariat:
-                intent = new Intent(this, ValidateActivity.class);
-                startActivity(intent);
-                break;
-    }
-        return true;
-    }
-
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (navigationManager.isDrawerOpen()) {
+            navigationManager.closeDrawer();
         } else {
             super.onBackPressed();
         }
     }
-    //!!!!
 }

@@ -6,10 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.volunteam.R;
@@ -19,7 +17,7 @@ import android.os.Handler;
 
 import java.util.List;
 
-public class SmallEntryAdapter extends RecyclerView.Adapter<SmallEntryAdapter.MyViewHolder> {
+public class SmallRecyclerAdapter extends RecyclerView.Adapter<SmallRecyclerAdapter.MyViewHolder> {
 
     public List<Voluntariat> mDataSet;
 
@@ -32,13 +30,13 @@ public class SmallEntryAdapter extends RecyclerView.Adapter<SmallEntryAdapter.My
         }
     }
 
-    public SmallEntryAdapter(List<Voluntariat> mDataSet){
+    public SmallRecyclerAdapter(List<Voluntariat> mDataSet){
         this.mDataSet = mDataSet;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public SmallEntryAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SmallRecyclerAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.vol_entry_small, parent, false);
         MyViewHolder vh = new MyViewHolder(v);

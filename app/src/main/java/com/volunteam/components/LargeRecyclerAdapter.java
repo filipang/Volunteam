@@ -2,17 +2,13 @@ package com.volunteam.components;
 
 import android.content.Intent;
 import android.os.Looper;
-import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.volunteam.R;
@@ -20,11 +16,9 @@ import com.volunteam.activities.VoluntariatActivity;
 
 import android.os.Handler;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+public class LargeRecyclerAdapter extends RecyclerView.Adapter<LargeRecyclerAdapter.MyViewHolder> {
 
     public ArrayList<Voluntariat> mDataSet;
 
@@ -41,13 +35,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         }
     }
 
-    public MyAdapter(ArrayList<Voluntariat> mDataSet){
+    public LargeRecyclerAdapter(ArrayList<Voluntariat> mDataSet){
         this.mDataSet = (ArrayList<Voluntariat>) mDataSet.clone();
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public LargeRecyclerAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         Log.d("error", "(onCreate)The parent has " + parent.getChildCount() + " children!");
         LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.vol_entry, parent, false);
