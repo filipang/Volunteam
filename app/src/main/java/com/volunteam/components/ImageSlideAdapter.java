@@ -2,6 +2,8 @@ package com.volunteam.components;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,25 +13,24 @@ import android.widget.ImageView;
 
 import com.volunteam.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ImageSlideAdapter extends PagerAdapter {
     private Context mContext;
     private Voluntariat voluntariat;
+    ArrayList<Drawable> drawables;
 
-    public ImageSlideAdapter(Context context, Voluntariat voluntariat) {
+    public ImageSlideAdapter(Context context, final Voluntariat voluntariat) {
         mContext = context;
         this.voluntariat = voluntariat;
     }
 
     @Override
-    public Object instantiateItem(ViewGroup collection, int position) {
+    public Object instantiateItem(ViewGroup collection, final int position) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        ImageView img = (ImageView) inflater.inflate(R.layout.image_slider_element, collection, false);
-        if(position == 0){
-            img.setImageDrawable(voluntariat.getDrawable());
-        }
-        else{
-            img.setImageDrawable(Voluntariat.loadDrawableFromURL(voluntariat.getImageList().get(position)));
-        }
+        final ImageView img = (ImageView) inflater.inflate(R.layout.image_slider_element, collection, false);
+        img.setImageDrawable(voluntariat.getDrawable());
         Log.d("happ", "THIS HAPPENED AT " + position);
         img.setScaleType(ImageView.ScaleType.CENTER_CROP);
         img.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));

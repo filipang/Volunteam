@@ -30,7 +30,7 @@
             android:padding="10dp">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/large_entry_profile_pic"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:layout_margin="0dp"
@@ -45,7 +45,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textProfileName"
+                    android:id="@+id/large_entry_organizer"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
@@ -67,7 +67,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textViewNoVoluntariate"
+                android:id="@+id/large_entry_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -88,7 +88,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="De voluntariate completate"
+                android:text="voluntariate completate"
                 android:textColor="@android:color/black"
                 android:textSize="35sp" />
 

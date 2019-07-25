@@ -38,7 +38,7 @@
                     android:padding="10dp">
 
                     <ImageView
-                        android:id="@+id/imageView2"
+                        android:id="@+id/large_entry_profile_pic"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
                         android:layout_margin="0dp"
@@ -53,26 +53,19 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/textProfileName"
+                            android:id="@+id/large_entry_organizer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Proedus"
                             android:textColor="@android:color/black" />
 
                         <TextView
-                            android:id="@+id/textView3"
+                            android:id="@+id/large_entry_counter"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="2dp"
                             android:text="153,000 voluntariate" />
 
-                        <RatingBar
-                            android:id="@+id/ratingBar"
-                            style="@style/Widget.AppCompat.RatingBar.Small"
-                            android:layout_width="78dp"
-                            android:layout_height="wrap_content"
-                            android:numStars="5"
-                            android:rating="4.5" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -111,7 +104,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:autoLink="all"
                     android:background="@color/colorPrimaryLightDark"
+                    android:linksClickable="false"
                     android:text="Vreau sa ma inscriu!" />
 
                 <View

@@ -18,9 +18,9 @@ import java.util.List;
 
 public class Voluntariat implements Serializable {
 
-    //Self-explanatory test list
+    //Voluntariat dataSet
     static private ArrayList<Voluntariat> dataSet;
-
+    static public String[] fieldArray = {"id_vol", "name", "imageURL", "imageURL1", "imageURL2", "imageURL3", "imageURL4", "imageURL5", "description", "day", "month", "year", "organizer", "link"};
 
     //This will include all info about a "Voluntariat" entry
     private Integer id_vol;
@@ -64,21 +64,15 @@ public class Voluntariat implements Serializable {
         }
     }
 
-    //Alternative version for method
-    /*
-    public static Drawable loadDrawableFromURL(String url){
-        try {
-            Bitmap x;
-            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            x = BitmapFactory.decodeStream(input);
-            return new BitmapDrawable(Resources.getSystem(), x);
-        }catch (Exception e){
-            return null;
+    //Returns the Voluntariat object with the given id
+    public static Voluntariat getVoluntariatWithId(Integer id){
+        for(Voluntariat voluntariat : dataSet){
+            if (voluntariat.id_vol == id){
+                return voluntariat;
+            }
         }
+        return null;
     }
-    */
 
     public String getLink() {
         return link;
@@ -105,7 +99,13 @@ public class Voluntariat implements Serializable {
     }
 
     public static void setDataSet(ArrayList<Voluntariat> dataSet) {
-        Voluntariat.dataSet = dataSet;
+        if(Voluntariat.dataSet != null) {
+            Voluntariat.dataSet.clear();
+            Voluntariat.dataSet.addAll(dataSet);
+        }
+        else {
+            Voluntariat.dataSet = dataSet;
+        }
     }
 
     public Integer getId_vol() {

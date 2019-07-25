@@ -15,6 +15,7 @@ import com.volunteam.activities.VoluntariatActivity;
 
 import android.os.Handler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SmallRecyclerAdapter extends RecyclerView.Adapter<SmallRecyclerAdapter.MyViewHolder> {
@@ -32,6 +33,10 @@ public class SmallRecyclerAdapter extends RecyclerView.Adapter<SmallRecyclerAdap
 
     public SmallRecyclerAdapter(List<Voluntariat> mDataSet){
         this.mDataSet = mDataSet;
+    }
+
+    public void update(){
+        this.mDataSet = (ArrayList<Voluntariat>) Voluntariat.getDataSet().clone();
     }
 
     // Create new views (invoked by the layout manager)

@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,8 +23,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.volunteam.R;
+import com.volunteam.components.FirebaseHandler;
 import com.volunteam.components.NavigationManager;
+import com.volunteam.components.SearchBarManager;
 import com.volunteam.components.User;
+import com.volunteam.components.Voluntariat;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 
 public class ValidateActivity extends AppCompatActivity implements View.OnClickListener {
@@ -36,6 +43,7 @@ public class ValidateActivity extends AppCompatActivity implements View.OnClickL
     DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
     NavigationManager navigationManager;
+    SearchBarManager searchBarManager;
 
     public EditText name, imageURL, imageURL1, imageURL2, imageURL3, imageURL4, imageURL5, description,
             link, day, month, year;
@@ -44,12 +52,20 @@ public class ValidateActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState){
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_validate);
+
 
         //Add side bar to this activity
         navigationManager = new NavigationManager(this);
         navigationManager.createNavBar();
+
+
+        //Disable the enabled by default search bar
+        searchBarManager = new SearchBarManager();
+        searchBarManager.disableSearchBar(this);
+
 
         mDatabase = FirebaseDatabase.getInstance();
         volDatabase = mDatabase.getReference();
@@ -69,18 +85,6 @@ public class ValidateActivity extends AppCompatActivity implements View.OnClickL
         link = (EditText)findViewById(R.id.link);
         getConfirmation.setOnClickListener(this);
 
-        //DECONECTARE BUTTON SETUP
-        View img = findViewById(R.id.imgdeconctare);
-        View txt = findViewById(R.id.logout);
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), LoginActivity.class);
-                startActivity(intent);
-            }
-        };
-        img.setOnClickListener(listener);
-        txt.setOnClickListener(listener);
 
     }
 
@@ -91,23 +95,21 @@ public class ValidateActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                dataSnapshot.getValue();
+                String vol_id = dataSnapshot.getValue().toString();
                 Log.d("pula", "" + dataSnapshot.getValue());
-                volDatabase.child("LastVolID").setValue(Integer.parseInt(dataSnapshot.getValue().toString()) + 1);
-                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("id_vol").setValue(Integer.parseInt(dataSnapshot.getValue().toString()));
-                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("name").setValue(name.getText().toString());
-                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL").setValue(imageURL.getText().toString());
-                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL1").setValue(imageURL1.getText().toString());
-                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL2").setValue(imageURL2.getText().toString());
-                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL3").setValue(imageURL3.getText().toString());
-                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL4").setValue(imageURL4.getText().toString());
-                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("imageURL5").setValue(imageURL5.getText().toString());
-                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("description").setValue(description.getText().toString());
-                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("day").setValue(day.getText().toString());
-                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("month").setValue(month.getText().toString());
-                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("year").setValue(year.getText().toString());
-                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("organizer").setValue(usr.getUid());
-                volDatabase.child("Voluntariate").child(dataSnapshot.getValue().toString()).child("link").setValue(link.getText().toString());
+                volDatabase.child("LastVolID").setValue(Integer.parseInt(vol_id )+1);
+                volDatabase.child("Voluntariate").child(vol_id).child("id_vol").setValue(Integer.parseInt(vol_id));
+
+                LinearLayout layout = findViewById(R.id.editLayout);
+                for(int i = 0; i < layout.getChildCount(); i++){
+                    if(layout.getChildAt(i).getTag()!=null) {
+                        if (Arrays.asList(Voluntariat.fieldArray).contains(layout.getChildAt(i).getTag().toString())) {
+                            FirebaseHandler.setVoluntariatValue(volDatabase, vol_id, layout.getChildAt(i).getTag().toString(), ((EditText) layout.getChildAt(i)).getText().toString());
+                        }
+                    }
+                }
+                FirebaseHandler.setVoluntariatValue(volDatabase, vol_id, "organizer", User.currentUser.id);
+                FirebaseHandler.getFirebaseHandler().getReference().child("Users").child(User.currentUser.id).child("organizedVolCount").setValue(""+(User.currentUser.organizedVolCount+1));
             }
 
             @Override
@@ -120,6 +122,7 @@ public class ValidateActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.post) {
@@ -128,7 +131,8 @@ public class ValidateActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    //Navigation related
+    //Overrides the back button so that it closes the drawer, and if the drawer is closed the back
+    //button will function normally
     @Override
     public void onBackPressed() {
         if (navigationManager.isDrawerOpen()) {

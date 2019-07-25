@@ -51,50 +51,42 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        //Add side bar to this activity
-        navigationManager = new NavigationManager(this);
-        navigationManager.createNavBar();
-
-        //DECONECTARE BUTTON SETUP
-        View img = findViewById(R.id.imgdeconctare);
-        View txt = findViewById(R.id.logout);
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), LoginActivity.class);
-                startActivity(intent);
-            }
-        };
-        img.setOnClickListener(listener);
-        txt.setOnClickListener(listener);
-
-        //RECYCLERVIEW SETUP
-        RecyclerManager recyclerManager = new RecyclerManager();
-        recyclerManager.createRecyclerView(this);
-
-        SortSpinnerManager sortSpinnerManager = new SortSpinnerManager();
-        sortSpinnerManager.createSortSpinnerManager(this, recyclerManager);
-
-        //SEARCH BAR SETUP
-
-        SearchBarManager searchBarManager = new SearchBarManager();
-        searchBarManager.createSearchBar(this, recyclerManager, Voluntariat.getDataSet());
+        //Downloads the database and than proceeds to setup the Activity
+        //onDataChange gets called when the download is finished and dataSnapshot is the downloaded
+        //data
 
 
-        FirebaseHandler.getFirebaseHandler().getReference().child("Users").child(FirebaseHandler.getFirebaseHandler().getAuth().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        final AppCompatActivity context = this;
+        FirebaseHandler.getFirebaseHandler().getReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User.currentUser = new User(dataSnapshot.child("firstName").getValue().toString(),
-                        dataSnapshot.child("lastName").getValue().toString(),
-                        dataSnapshot.child("email").getValue().toString(),
-                        new ArrayList<Integer>(),
-                        dataSnapshot.getKey());
-                for(DataSnapshot x : dataSnapshot.child("voluntariate").getChildren()) {
-                    User.currentUser.voluntariate.add(Integer.parseInt(x.getValue().toString()));
-                }
-                TextView textViewHeader = findViewById(R.id.nav_header_textView);
-                textViewHeader.setText(User.currentUser.lastName + " " + User.currentUser.firstName);
+                FirebaseHandler.getFirebaseHandler().setData(dataSnapshot);
+                FirebaseHandler.loadDataSet(dataSnapshot);
+                Log.d("mydebug", dataSnapshot.child("Users").child(FirebaseHandler.getFirebaseHandler().getAuth().getUid()).toString());
+                DataSnapshot userSnapshot = dataSnapshot.child("Users").child(FirebaseHandler.getFirebaseHandler().getAuth().getUid());
+                User.initializeCurrentUser(userSnapshot);
+
+                //Add side bar to this activity
+                navigationManager = new NavigationManager(context);
+                navigationManager.createNavBar();
+
+                //Recycler view setup
+                RecyclerManager recyclerManager = new RecyclerManager();
+                recyclerManager.createRecyclerWithLargeElements(context, Voluntariat.getDataSet(), new SearchBarManager());
+
+                //Sort spinner setup
+                SortSpinnerManager sortSpinnerManager = new SortSpinnerManager();
+                sortSpinnerManager.createSortSpinnerManager(context, recyclerManager);
+
+                //Search bar setup
+                SearchBarManager searchBarManager = new SearchBarManager();
+                searchBarManager.createSearchBar(context, recyclerManager, Voluntariat.getDataSet());
             }
 
             @Override
@@ -102,12 +94,10 @@ public class MainActivity extends AppCompatActivity{
 
             }
         });
-
-
-
     }
 
-    //Navigation related
+    //Overrides the back button so that it closes the drawer, and if the drawer is closed the back
+    //button will function normally
     @Override
     public void onBackPressed() {
         if (navigationManager.isDrawerOpen()) {

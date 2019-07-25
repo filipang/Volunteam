@@ -10,6 +10,12 @@ import java.util.ArrayList;
 
 public class SearchBarManager {
 
+    private static String currentQuery;
+
+    public static String getCurrentQuery(){
+        return currentQuery;
+    }
+
     public SearchBarManager(){
 
     }
@@ -32,6 +38,7 @@ public class SearchBarManager {
             @Override
             public boolean onClose() {
 
+                currentQuery = null;
                 recyclerManager.largeRecyclerAdapter.mDataSet = (ArrayList<Voluntariat>) dataSet.clone();
                 recyclerManager.largeRecyclerAdapter.notifyDataSetChanged();
                 return false;
@@ -42,17 +49,11 @@ public class SearchBarManager {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+
                 //SORT DATA SET
-                ArrayList<Voluntariat> filteredList = (ArrayList<Voluntariat>) dataSet.clone();
-                if(!query.equals("")) {
-                    for (Voluntariat vol : Voluntariat.getDataSet()) {
-                        if (!(vol.getDescription().toLowerCase().contains(query.toLowerCase()) || vol.getName().toLowerCase().contains(query))) {
-                            filteredList.remove(vol);
-                        }
-                    }
-                }
-                recyclerManager.largeRecyclerAdapter.mDataSet = filteredList;
-                recyclerManager.largeRecyclerAdapter.notifyDataSetChanged();
+                currentQuery = query;
+                searchLarge(query, dataSet, recyclerManager.largeRecyclerAdapter);
+
                 return false;
             }
 
@@ -66,13 +67,14 @@ public class SearchBarManager {
 
     //This will enable the search bar for Recycler views with small entries
     public void createSearchBar (AppCompatActivity context, final SmallRecyclerAdapter adapter, final ArrayList<Voluntariat> dataSet) {
-        SearchView searchView = context.findViewById(R.id.search_view);
+        final SearchView searchView = context.findViewById(R.id.search_view);
         searchView.setVisibility(View.VISIBLE);
 
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
 
+                currentQuery = null;
                 adapter.mDataSet = (ArrayList<Voluntariat>) dataSet.clone();
                 adapter.notifyDataSetChanged();
                 return false;
@@ -83,17 +85,11 @@ public class SearchBarManager {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+
                 //SORT DATA SET
-                ArrayList<Voluntariat> filteredList = (ArrayList<Voluntariat>) dataSet.clone();
-                if(!query.equals("")) {
-                    for (Voluntariat vol : Voluntariat.getDataSet()) {
-                        if (!(vol.getDescription().toLowerCase().contains(query.toLowerCase()) || vol.getName().toLowerCase().contains(query))) {
-                            filteredList.remove(vol);
-                        }
-                    }
-                }
-                adapter.mDataSet = filteredList;
-                adapter.notifyDataSetChanged();
+                currentQuery = query;
+                searchSmall(query, dataSet, adapter);
+
                 return false;
             }
 
@@ -103,5 +99,41 @@ public class SearchBarManager {
             }
 
         });
+    }
+
+    public void searchSmall(String query, ArrayList<Voluntariat> dataSet, SmallRecyclerAdapter adapter){
+        if(currentQuery==null){
+            adapter.mDataSet = (ArrayList<Voluntariat>) dataSet.clone();
+            adapter.notifyDataSetChanged();
+            return;
+        }
+        ArrayList<Voluntariat> filteredList = (ArrayList<Voluntariat>) dataSet.clone();
+        if(!query.equals("")) {
+            for (Voluntariat vol : Voluntariat.getDataSet()) {
+                if (!(vol.getDescription().toLowerCase().contains(query.toLowerCase()) || vol.getName().toLowerCase().contains(query))) {
+                    filteredList.remove(vol);
+                }
+            }
+        }
+        adapter.mDataSet = filteredList;
+        adapter.notifyDataSetChanged();
+    }
+
+    public void searchLarge(String query, ArrayList<Voluntariat> dataSet, LargeRecyclerAdapter adapter){
+        if(currentQuery==null){
+            adapter.mDataSet = (ArrayList<Voluntariat>) dataSet.clone();
+            adapter.notifyDataSetChanged();
+            return;
+        }
+        ArrayList<Voluntariat> filteredList = (ArrayList<Voluntariat>) dataSet.clone();
+        if(!query.equals("")) {
+            for (Voluntariat vol : Voluntariat.getDataSet()) {
+                if (!(vol.getDescription().toLowerCase().contains(query.toLowerCase()) || vol.getName().toLowerCase().contains(query))) {
+                    filteredList.remove(vol);
+                }
+            }
+        }
+        adapter.mDataSet = filteredList;
+        adapter.notifyDataSetChanged();
     }
 }

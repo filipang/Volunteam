@@ -71,6 +71,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         });
             }
         });
+        /*
+        FirebaseHandler.getFirebaseHandler().getReference().child("Voluntariate").removeValue();
+        FirebaseHandler.getFirebaseHandler().getReference().child("Users").removeValue();
+        FirebaseHandler.getFirebaseHandler().getReference().child("LastVolID").setValue(1);*/
+
+
     }
 
 

@@ -13,7 +13,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/large_entry_profile_pic"
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:layout_margin="0dp"
@@ -21,38 +21,32 @@
             android:scaleType="centerCrop" />
 
         <LinearLayout
+            android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="6dp"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textProfileName"
+                android:id="@+id/large_entry_organizer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Proedus"
                 android:textColor="@android:color/black" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/large_entry_counter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:text="153,000 voluntariate" />
 
-            <RatingBar
-                android:id="@+id/ratingBar"
-                style="@style/Widget.AppCompat.RatingBar.Small"
-                android:layout_width="93dp"
-                android:layout_height="wrap_content"
-                android:numStars="5"
-                android:rating="4.5" />
         </LinearLayout>
 
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textViewNoVoluntariate"
+        android:id="@+id/large_entry_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -63,14 +57,14 @@
         android:textColor="@android:color/black" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/large_entry_image"
         android:layout_width="match_parent"
         android:layout_height="178dp"
         android:background="@color/colorPrimaryLightDark"
         android:scaleType="centerCrop" />
 
     <TextView
-        android:id="@+id/title_vol_1"
+        android:id="@+id/large_entry_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryLightTint"
@@ -85,7 +79,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/large_entry_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

@@ -1,27 +1,15 @@
 package com.volunteam.activities;
 
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.volunteam.R;
 import com.volunteam.components.NavigationManager;
+import com.volunteam.components.SearchBarManager;
 import com.volunteam.components.User;
-import com.volunteam.components.Voluntariat;
-
-import org.w3c.dom.Text;
 
 public class ProfilActivity extends AppCompatActivity{
 
@@ -38,32 +26,21 @@ public class ProfilActivity extends AppCompatActivity{
         navigationManager = new NavigationManager(this);
         navigationManager.createNavBar();
 
-        //DECONECTARE BUTTON SETUP
-        View img = findViewById(R.id.imgdeconctare);
-        View txt = findViewById(R.id.logout);
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), LoginActivity.class);
-                startActivity(intent);
-            }
-        };
-        img.setOnClickListener(listener);
-        txt.setOnClickListener(listener);
-
-        //DISABLE SEARCH BAR
-        SearchView searchView = findViewById(R.id.search_view);
-        if(searchView!=null)searchView.setVisibility(View.GONE);
+        //Disable the enabled by default search bar
+        SearchBarManager searchBarManager = new SearchBarManager();
+        searchBarManager.disableSearchBar(this);
 
         //PROFILE DETAILS SETUP
-        TextView number = findViewById(R.id.textViewNoVoluntariate);
-        TextView name = findViewById(R.id.textProfileName);
+        TextView number = findViewById(R.id.large_entry_description);
+        TextView name = findViewById(R.id.large_entry_organizer);
         number.setText(""+User.currentUser.voluntariate.size());
         name.setText(User.currentUser.lastName + " " + User.currentUser.firstName);
 
     }
 
-    //Navigation related
+
+    //Overrides the back button so that it closes the drawer, and if the drawer is closed the back
+    //button will function normally
     @Override
     public void onBackPressed() {
         if (navigationManager.isDrawerOpen()) {

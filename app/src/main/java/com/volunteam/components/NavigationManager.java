@@ -15,8 +15,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.TextView;
 
 import com.volunteam.R;
+import com.volunteam.activities.LoginActivity;
 import com.volunteam.activities.MainActivity;
 import com.volunteam.activities.ProfilActivity;
 import com.volunteam.activities.ToateVolActivity;
@@ -27,10 +31,10 @@ public class NavigationManager implements NavigationView.OnNavigationItemSelecte
     public AppCompatActivity context;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
+    public NavigationView nav;
 
     public NavigationManager(AppCompatActivity context){
         this.context = context;
-
     }
 
    public void createNavBar(){
@@ -41,9 +45,32 @@ public class NavigationManager implements NavigationView.OnNavigationItemSelecte
         drawer.addDrawerListener(toggle);
         context.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         context.getSupportActionBar().setHomeButtonEnabled(true);
-        NavigationView nav = context.findViewById(R.id.nav_view);
+        nav = context.findViewById(R.id.nav_view);
         nav.setNavigationItemSelectedListener(this);
+
+        //This enables the functionality of 
+        View img = context.findViewById(R.id.imgdeconctare);
+        View txt = context.findViewById(R.id.logout);
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), LoginActivity.class);
+                context.startActivity(intent);
+            }
+        };
+        img.setOnClickListener(listener);
+        txt.setOnClickListener(listener);
         toggle.syncState();
+
+
+       nav.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+           @Override
+           public void onGlobalLayout() {
+               TextView textViewHeader = nav.findViewById(R.id.nav_header_textView);
+               Log.d("textHeader", textViewHeader.getText().toString());
+               textViewHeader.setText(User.currentUser.lastName + " " + User.currentUser.firstName);
+           }
+       });
 
     }
 
