@@ -2,6 +2,7 @@ package com.volunteam.components;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.net.VpnService;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,8 @@ public class VoluntariatInfoManager {
         TextView text_descriere = context.findViewById(R.id.text_descriere);
         text_titlu.setText(vol.getName());
         text_descriere.setText(vol.getDescription());
+        TextView textViewCount = context.findViewById(R.id.large_entry_counter);
+        textViewCount.setText(FirebaseHandler.getFirebaseHandler().getData().child("Users").child(vol.getId_user()).child("organizedVolCount").getValue().toString() + " voluntariate publicate");
 
 
         //!!

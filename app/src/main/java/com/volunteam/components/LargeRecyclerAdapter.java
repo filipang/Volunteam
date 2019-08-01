@@ -87,7 +87,7 @@ public class LargeRecyclerAdapter extends RecyclerView.Adapter<LargeRecyclerAdap
         textView.setText(vol.getDescription());
 
         TextView textView5 = (TextView) element.findViewById(R.id.large_entry_counter);
-        textView5.setText(FirebaseHandler.getFirebaseHandler().getData().child("Users").child(vol.getId_user()).child("organizedVolCount").getValue().toString() + " voluntariate");
+        textView5.setText(FirebaseHandler.getFirebaseHandler().getData().child("Users").child(vol.getId_user()).child("organizedVolCount").getValue().toString() + " voluntariate publicate");
 
         TextView textView3 = (TextView) element.findViewById(R.id.large_entry_organizer);
         textView3.setText("XDDD");
