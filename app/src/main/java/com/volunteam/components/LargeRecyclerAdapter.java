@@ -1,16 +1,25 @@
 package com.volunteam.components;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.volunteam.R;
 import com.volunteam.activities.VoluntariatActivity;
 
@@ -74,46 +83,83 @@ public class LargeRecyclerAdapter extends RecyclerView.Adapter<LargeRecyclerAdap
                 v.getContext().startActivity(intent);
             }
         };
+        TextView textView = (TextView) element.findViewById(R.id.large_entry_description);
+        textView.setText(vol.getDescription());
+
+        TextView textView5 = (TextView) element.findViewById(R.id.large_entry_counter);
+        textView5.setText(FirebaseHandler.getFirebaseHandler().getData().child("Users").child(vol.getId_user()).child("organizedVolCount").getValue().toString() + " voluntariate");
+
+        TextView textView3 = (TextView) element.findViewById(R.id.large_entry_organizer);
+        textView3.setText("XDDD");
+        textView3.setText(FirebaseHandler.getFirebaseHandler().getData().child("Users").child(vol.getId_user()).child("firstName").getValue().toString() + " " + FirebaseHandler.getFirebaseHandler().getData().child("Users").child(vol.getId_user()).child("lastName").getValue().toString());
+
+        ImageView img1 = (ImageView) element.findViewById(R.id.large_entry_image);
+        img1.setImageResource(R.drawable.loading);
+        img1.setOnClickListener(listener);
+
+        ImageView img2 = (ImageView) element.findViewById(R.id.large_entry_profile_pic);
+        img2.setImageResource(R.drawable.ic_profile);
+
+        TextView textView1 = (TextView) element.findViewById(R.id.large_entry_name);
+        textView1.setText(vol.getName());
+        textView1.setOnClickListener(listener);
+
+        TextView textView2 = (TextView) element.findViewById(R.id.large_entry_date);
+        Date date = vol.getDate();
+        textView2.setText("" + date.day + "/" + date.month + "/" + date.year);
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-                mDataSet.get(fposition).setDrawable(Voluntariat.loadDrawableFromURL(mDataSet.get(fposition).getImageURL()));
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                    try {
-                        TextView textView = (TextView) element.findViewById(R.id.large_entry_description);
-                        textView.setText(vol.getDescription());
+                    if(URLUtil.isValidUrl(mDataSet.get(fposition).getImageURL())) {
+                        if(mDataSet.get(fposition).getDrawable()==null)
+                            mDataSet.get(fposition).setDrawable(Voluntariat.loadDrawableFromURL(mDataSet.get(fposition).getImageURL()));
 
-                        TextView textView5 = (TextView) element.findViewById(R.id.large_entry_counter);
-                        textView5.setText(FirebaseHandler.getFirebaseHandler().getData().child("Users").child(vol.getId_user()).child("organizedVolCount").getValue().toString() + " voluntariate");
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    ImageView img1 = (ImageView) element.findViewById(R.id.large_entry_image);
+                                    img1.setImageDrawable(vol.getDrawable());
+                                    img1.setOnClickListener(listener);
 
-                        TextView textView3 = (TextView) element.findViewById(R.id.large_entry_organizer);
-                        textView3.setText("XDDD");
-                        textView3.setText(FirebaseHandler.getFirebaseHandler().getData().child("Users").child(vol.getId_user()).child("firstName").getValue().toString() + " " + FirebaseHandler.getFirebaseHandler().getData().child("Users").child(vol.getId_user()).child("lastName").getValue().toString());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    Log.d("error", "Failed at " + fposition + ", and the size is " + mDataSet.size());
+                                }
+                            }
+                        });
+                    }else {
+                        // Create a storage reference from our app
+                        FirebaseStorage storage = FirebaseStorage.getInstance();
+                        StorageReference storageRef = storage.getReference();
+                        StorageReference islandRef = storageRef.child(mDataSet.get(fposition).getImageURL());
 
-                        ImageView img1 = (ImageView) element.findViewById(R.id.large_entry_image);
-                        img1.setImageDrawable(vol.getDrawable());
-                        img1.setOnClickListener(listener);
+                        final long ONE_MEGABYTE = 1024 * 1024;
+                        islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                            @Override
+                            public void onSuccess(byte[] bytes) {
+                               mDataSet.get(fposition).setDrawable(new BitmapDrawable(BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
+                                try {
+                                    ImageView img1 = (ImageView) element.findViewById(R.id.large_entry_image);
+                                    img1.setImageDrawable(vol.getDrawable());
+                                    img1.setOnClickListener(listener);
 
-                        ImageView img2 = (ImageView) element.findViewById(R.id.large_entry_profile_pic);
-                        img2.setImageResource(R.drawable.ic_profile);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    Log.d("error", "Failed at " + fposition + ", and the size is " + mDataSet.size());
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                ImageView img1 = (ImageView) element.findViewById(R.id.large_entry_image);
+                                img1.setImageResource(R.drawable.no_image);
+                                img1.setOnClickListener(listener);
+                            }
+                        });
 
-                        TextView textView1 = (TextView) element.findViewById(R.id.large_entry_name);
-                        textView1.setText(vol.getName());
-                        textView1.setOnClickListener(listener);
-
-                        TextView textView2 = (TextView) element.findViewById(R.id.large_entry_date);
-                        Date date = vol.getDate();
-                        textView2.setText("" + date.day + "/" + date.month + "/" + date.year);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Log.d("error", "Failed at " + fposition + ", and the size is " + mDataSet.size());
                     }
-                }
-            });
             }
 
         }).start();

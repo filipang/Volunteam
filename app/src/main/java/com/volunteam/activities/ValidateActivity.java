@@ -35,6 +35,8 @@ import java.util.Arrays;
 
 public class ValidateActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int PICK_IMAGE_REQUEST = 1;
+
     public FirebaseUser usr = FirebaseAuth.getInstance().getCurrentUser();
     public FirebaseDatabase mDatabase;
     public DatabaseReference volDatabase;
@@ -86,6 +88,17 @@ public class ValidateActivity extends AppCompatActivity implements View.OnClickL
         getConfirmation.setOnClickListener(this);
 
 
+
+        //Upload button handling
+        final Button buttonImage1 = findViewById(R.id.button_image_1);
+        buttonImage1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseImage();
+            }
+        });
+
+
     }
 
     public void storeVolInDatabase() {
@@ -122,6 +135,29 @@ public class ValidateActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+
+    private void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        FirebaseHandler.uploadImageToFirebase(intent, this);
+    }
+
+    @Override
+    protected void onActivityResult(
+            int aRequestCode, int aResultCode, Intent aData
+    ) {
+        switch (aRequestCode) {
+            case PICK_IMAGE_REQUEST:
+                FirebaseHandler.uploadImageToFirebase(aData, this);
+                break;
+            /*case SOME_OTHER_REQUEST:
+                handleSomethingElse(aData);
+                break;*/
+        }
+        super.onActivityResult(aRequestCode, aResultCode, aData);
+    }
 
     @Override
     public void onClick(View v) {

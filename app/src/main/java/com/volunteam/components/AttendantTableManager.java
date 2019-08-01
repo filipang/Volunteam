@@ -64,7 +64,8 @@ public class AttendantTableManager {
                                 @Override
                                 public void onClick(View v) {
                                     vol.userList.remove(user_id);
-                                    FirebaseHandler.getFirebaseHandler().getReference().child("Users").child(user_id).child("voluntariate").child(vol.getId_vol().toString()).child(user_id).removeValue();
+                                    FirebaseHandler.getFirebaseHandler().getReference().child("Users").child(user_id).child("voluntariate").child(vol.getIdVol().toString()).child(user_id).removeValue();
+                                    FirebaseHandler.getFirebaseHandler().getReference().child("Voluntariate").child(vol.getIdVol()+"").child("users").child(user_id).removeValue();
                                     //ALSO REMOVE FROM DATABASE
                                     row.removeViewAt(4);
                                     row.removeViewAt(3);

@@ -50,6 +50,18 @@ public class VoluntariatInfoManager {
             }
         });
 
+        //BUTTON FORMULAR SETUP
+        final Button buttonFormular = context.findViewById(R.id.button_formular);
+        buttonFormular.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(URLUtil.isValidUrl(vol.getLink())) {
+                    Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(vol.getLink()));
+                    buttonFormular.getContext().startActivity(viewIntent);
+                }
+            }
+        });
+
         //BUTTON DE INSCRIERE SETUP
         final Button buttonInscriere = context.findViewById(R.id.button_inscriere);
         TextView textInscriere = context.findViewById(R.id.text_inscriere);

@@ -76,9 +76,17 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:ems="10"
-                android:hint="Poza Reprezentativa"
+                android:freezesText="false"
+                android:hint="Link catre poza reprezentativa"
                 android:inputType="textPersonName"
-                android:tag="imageURL" />
+                android:tag="imageURL"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/button_image_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Incarca din galerie" />
 
             <EditText
                 android:id="@+id/imageURL1"

@@ -1,15 +1,24 @@
 package com.volunteam.components;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.volunteam.R;
 import com.volunteam.activities.VoluntariatActivity;
 
@@ -36,7 +45,7 @@ public class SmallRecyclerAdapter extends RecyclerView.Adapter<SmallRecyclerAdap
     }
 
     public void update(){
-        this.mDataSet = (ArrayList<Voluntariat>) Voluntariat.getDataSet().clone();
+        this.mDataSet = (ArrayList<Voluntariat>) User.getVolFromUser(FirebaseHandler.getFirebaseHandler().getData());
     }
 
     // Create new views (invoked by the layout manager)
@@ -57,39 +66,84 @@ public class SmallRecyclerAdapter extends RecyclerView.Adapter<SmallRecyclerAdap
         final MyViewHolder fholder = holder;
         final int fposition = position;
         final Handler handler = new Handler(Looper.getMainLooper());
+        final LinearLayout element = fholder.layout;
+        final Voluntariat vol = mDataSet.get(fposition);
+
+        final View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), VoluntariatActivity.class);
+                intent.putExtra("voluntariat", vol.getId_vol());
+                v.getContext().startActivity(intent);
+            }
+        };
+
+        TextView textView = (TextView) ((ViewGroup)((ViewGroup)element.getChildAt(0)).getChildAt(1)).getChildAt(0);
+        textView.setText(vol.getName());
+        textView.setOnClickListener(listener);
+
+        TextView textViewOrganiser = (TextView) ((ViewGroup)((ViewGroup)element.getChildAt(0)).getChildAt(1)).getChildAt(1);
+        //textViewOrganiser.setText(vol.getName());//TEXT WILL BE THE NAME OF THE USER THAT POSTED THIS
+        textViewOrganiser.setOnClickListener(listener);
+
+        ImageView img = (ImageView) ((ViewGroup)element.getChildAt(0)).getChildAt(0);
+        img.setImageResource(R.drawable.loading);
+        img.setOnClickListener(listener);
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-                mDataSet.get(fposition).setDrawable(Voluntariat.loadDrawableFromURL(mDataSet.get(fposition).getImageURL()));
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        LinearLayout element = fholder.layout;
-                        final Voluntariat vol = mDataSet.get(fposition);
 
-                        View.OnClickListener listener = new View.OnClickListener() {
+
+                if(URLUtil.isValidUrl(mDataSet.get(fposition).getImageURL())) {
+                        if(mDataSet.get(fposition).getDrawable()==null)
+                            mDataSet.get(fposition).setDrawable(Voluntariat.loadDrawableFromURL(mDataSet.get(fposition).getImageURL()));
+
+                        handler.post(new Runnable() {
                             @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(v.getContext(), VoluntariatActivity.class);
-                                intent.putExtra("voluntariat", vol.getId_vol());
-                                v.getContext().startActivity(intent);
+                            public void run() {
+                                try {
+                                    ImageView img1 = (ImageView) ((ViewGroup)element.getChildAt(0)).getChildAt(0);
+                                    img1.setImageDrawable(vol.getDrawable());
+                                    img1.setOnClickListener(listener);
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    Log.d("error", "Failed at " + fposition + ", and the size is " + mDataSet.size());
+                                }
                             }
-                        };
+                        });
+                    }else {
+                        // Create a storage reference from our app
+                        FirebaseStorage storage = FirebaseStorage.getInstance();
+                        StorageReference storageRef = storage.getReference();
+                        StorageReference islandRef = storageRef.child(mDataSet.get(fposition).getImageURL());
 
-                        TextView textView = (TextView) ((ViewGroup)((ViewGroup)element.getChildAt(0)).getChildAt(1)).getChildAt(0);
-                        textView.setText(vol.getName());
-                        textView.setOnClickListener(listener);
+                        final long ONE_MEGABYTE = 1024 * 1024;
+                        islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                            @Override
+                            public void onSuccess(byte[] bytes) {
+                               mDataSet.get(fposition).setDrawable(new BitmapDrawable(BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
+                                try {
+                                    ImageView img1 = (ImageView) ((ViewGroup)element.getChildAt(0)).getChildAt(0);
+                                    img1.setImageDrawable(vol.getDrawable());
+                                    img1.setOnClickListener(listener);
 
-                        TextView textViewOrganiser = (TextView) ((ViewGroup)((ViewGroup)element.getChildAt(0)).getChildAt(1)).getChildAt(1);
-                        //textViewOrganiser.setText(vol.getName());//TEXT WILL BE THE NAME OF THE USER THAT POSTED THIS
-                        textViewOrganiser.setOnClickListener(listener);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    Log.d("error", "Failed at " + fposition + ", and the size is " + mDataSet.size());
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                ImageView img1 = (ImageView) ((ViewGroup)element.getChildAt(0)).getChildAt(0);
+                                img1.setImageResource(R.drawable.no_image);
+                                img1.setOnClickListener(listener);
+                            }
+                        });
 
-                        ImageView img = (ImageView) ((ViewGroup)element.getChildAt(0)).getChildAt(0);
-                        img.setImageDrawable(vol.getDrawable());
-                        img.setOnClickListener(listener);
                     }
-                });
             }
         }).start();
 

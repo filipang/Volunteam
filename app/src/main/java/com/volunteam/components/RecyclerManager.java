@@ -38,7 +38,6 @@ public class RecyclerManager {
                 public void onRefresh() {
                     Log.d("check", "AAAAAAAAAA");
                     FirebaseHandler.refreshLargeAdapter(largeRecyclerAdapter, swipeRefreshLayout, searchBarManager);
-                    largeRecyclerAdapter.notifyDataSetChanged();
                     //searchBarManager.createSearchBar(context, finalThis, (ArrayList<Voluntariat>) finalLargeRecyclerAdapter.mDataSet);
                 }
 
@@ -64,7 +63,7 @@ public class RecyclerManager {
                 @Override
                 public void onRefresh() {
                     FirebaseHandler.refreshSmallAdapter(smallRecyclerAdapter, swipeRefreshLayout, searchBarManager);
-                    smallRecyclerAdapter.notifyDataSetChanged();
+                    //smallRecyclerAdapter.notifyDataSetChanged();
                     //searchBarManager.createSearchBar(context, smallRecyclerAdapter, (ArrayList<Voluntariat>) finalSmallRecyclerAdapter.mDataSet);
                 }
 
